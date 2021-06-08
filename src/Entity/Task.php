@@ -6,8 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
- * @ORM\Table
+ * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
  */
 class Task
 {
@@ -16,12 +15,8 @@ class Task
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private int $id;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
 
     /**
      * @ORM\Column(type="string")
@@ -40,6 +35,17 @@ class Task
      */
     private $isDone;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\user", inversedBy="tasks")
+     */
+    private $author;
+
     public function __construct()
     {
         $this->createdAt = new \Datetime();
@@ -51,15 +57,6 @@ class Task
         return $this->id;
     }
 
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
 
     public function getTitle()
     {
@@ -81,13 +78,38 @@ class Task
         $this->content = $content;
     }
 
-    public function isDone()
+    public function getIsDone(): ?bool
     {
         return $this->isDone;
     }
 
-    public function toggle($flag)
+    public function setIsDone(bool $isDone): self
     {
-        $this->isDone = $flag;
+        $this->isDone = $isDone;
+
+        return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+
+    public function getAuthor(): ?user
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?user $author): self
+    {
+        $this->author = $author;
+
+        return $this;
     }
 }
