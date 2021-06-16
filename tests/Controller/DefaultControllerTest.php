@@ -1,18 +1,23 @@
 <?php
 
-namespace Tests\App\Controller;
-
+namespace App\Tests\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
-    public function testIndex()
+
+    
+    public function testindex(): void
     {
+        // This calls KernelTestCase::bootKernel(), and creates a
+        // "client" that is acting as the browser
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/');
+        // Request a specific page
+        $client->request('GET', '/');
+        $this->assertEquals(200, $client->getResponse());
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Welcome to Symfony', $crawler->filter('#container h1')->text());
+        // Validate a successful response and some content
+        $this->assertResponseIsSuccessful();
     }
 }

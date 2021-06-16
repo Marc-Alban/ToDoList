@@ -40,5 +40,4 @@ security:
         - { path: ^/, roles: ROLE_USER }
     
     role_hierarchy:
-        ROLE_USER: ROLE_ANONYMOUS
         ROLE_ADMIN: ROLE_USER
