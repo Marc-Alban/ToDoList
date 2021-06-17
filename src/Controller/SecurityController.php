@@ -17,7 +17,7 @@ class SecurityController extends AbstractController
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
-    public function login(AuthenticationUtils $authenticationUtils)
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
 
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -33,7 +33,7 @@ class SecurityController extends AbstractController
      * @Route("/login_check", name="login_check")
      * @codeCoverageIgnore
      */
-    public function loginCheck()
+    public function loginCheck(): void
     {
         // This code is never executed.
     }
@@ -42,7 +42,7 @@ class SecurityController extends AbstractController
      * @Route("/logout", name="logout")
      * @codeCoverageIgnore
      */
-    public function logoutCheck()
+    public function logoutCheck(): void
     {
         // This code is never executed.
     }

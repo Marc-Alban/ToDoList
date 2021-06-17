@@ -10,7 +10,6 @@ use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,30 +18,26 @@ class TaskController extends AbstractController
 {
     /**
      * @Route("/tasks", name="task_list")
-     * @param TaskRepository $taskRepository
-     * @return Response
      */
-    public function listAction(TaskRepository $taskRepository):Response
+    public function listAction(TaskRepository $taskRepository): Response
     {
         return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findAll()]);
     }
+
     /**
      * @Route("/tasks_done", name="task_list_done")
-     * @param TaskRepository $taskRepository
-     * @return Response
      */
-     public function listDone(TaskRepository $taskRepository):Response
+
+     public function listDone(TaskRepository $taskRepository): Response
      {
 
         return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findBy(['isDone'=>true])]);
      }
+
     /**
      * @Route("/tasks/create", name="task_create")
-     * @param Request $request
-     * @param EntityManagerInterface $manager
-     * @return RedirectResponse|Response
      */
-    public function createAction(Request $request,EntityManagerInterface $manager)
+    public function createAction(Request $request,EntityManagerInterface $manager): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -65,13 +60,9 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/edit", name="task_edit")
-     * @param Task $task
-     * @param Request $request
-     * @param EntityManagerInterface $manager
-     * @return RedirectResponse|Response
-     * @Security ("(is_granted('ROLE_USER') and user === task.getUser()) or is_granted('ROLE_ADMIN')")
+     * @Security ("is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')")
      */
-    public function editAction(Task $task, Request $request,EntityManagerInterface $manager)
+    public function editAction(Task $task, Request $request,EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(TaskType::class, $task);
 
