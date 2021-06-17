@@ -1,6 +1,6 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    encoders:
+    password_hashers:
         App\Entity\User: bcrypt
 
     providers:
@@ -40,5 +40,4 @@ security:
         - { path: ^/, roles: ROLE_USER }
     
     role_hierarchy:
-        ROLE_USER: ROLE_ANONYMOUS
         ROLE_ADMIN: ROLE_USER
