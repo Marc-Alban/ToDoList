@@ -103,13 +103,9 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getRoles()
+    public function getRoles(): ?array
     {
-        $roles = $this->roles;
-
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
     public function setRoles(array $roles): self
@@ -124,9 +120,6 @@ class User implements UserInterface
         return null;
     }
 
-    /**
-     * @return Collection|Task[]
-     */
     public function getTasks(): Collection
     {
         return $this->tasks;

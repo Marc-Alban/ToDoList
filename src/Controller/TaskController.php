@@ -60,7 +60,6 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/edit", name="task_edit")
-     * @Security ("is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')")
      */
     public function editAction(Task $task, Request $request,EntityManagerInterface $manager): Response
     {
@@ -103,7 +102,6 @@ class TaskController extends AbstractController
      * @param Task $task
      * @param EntityManagerInterface $manager
      * @return RedirectResponse
-     * @Security ("(is_granted('ROLE_USER') and user === task.getUser()) or is_granted('ROLE_ADMIN')")
      */
     public function deleteTaskAction(Task $task,EntityManagerInterface $manager)
     {
