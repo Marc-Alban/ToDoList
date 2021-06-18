@@ -15,14 +15,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends AbstractController
 {
+
     /**
      * @Route("/tasks", name="task_list")
      */
     public function listAction(TaskRepository $taskRepository): Response
     {
-        $task = $taskRepository->findByIdUser($this->getUser()->getId());
-        $page = 'list';
-        return $this->render('task/list.html.twig', ['tasks' =>$task, 'page'=>$page]);
+        $task = $taskRepository->findByIdUserAndIsDoneFalse($this->getUser()->getId());
+        return $this->render('task/list.html.twig', ['tasks' =>$task]);
     }
 
     /**
@@ -30,9 +30,8 @@ class TaskController extends AbstractController
      */
      public function listDone(TaskRepository $taskRepository): Response
      {
-        $task = $taskRepository->findByIdAndIsDone($this->getUser()->getId());
-        $page = 'isDone';
-        return $this->render('task/list.html.twig', ['tasks' => $task, 'page'=>$page]);
+        $task = $taskRepository->findByIdUserAndIsDoneTrue($this->getUser()->getId());
+        return $this->render('task/isDone.html.twig', ['tasks' => $task]);
      }
 
      
