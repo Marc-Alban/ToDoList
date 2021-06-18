@@ -8,7 +8,6 @@ use App\Form\TaskType;
 
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,19 +20,22 @@ class TaskController extends AbstractController
      */
     public function listAction(TaskRepository $taskRepository): Response
     {
-        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findAll()]);
+        $task = $taskRepository->findByIdUser($this->getUser()->getId());
+        $page = 'list';
+        return $this->render('task/list.html.twig', ['tasks' =>$task, 'page'=>$page]);
     }
 
     /**
-     * @Route("/tasks_done", name="task_list_done")
+     * @Route("/tasks/done", name="task_list_done")
      */
-
      public function listDone(TaskRepository $taskRepository): Response
      {
-
-        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findBy(['isDone'=>true])]);
+        $task = $taskRepository->findByIdAndIsDone($this->getUser()->getId());
+        $page = 'isDone';
+        return $this->render('task/list.html.twig', ['tasks' => $task, 'page'=>$page]);
      }
 
+     
     /**
      * @Route("/tasks/create", name="task_create")
      */
@@ -89,7 +91,7 @@ class TaskController extends AbstractController
      */
     public function toggleTaskAction(Task $task,EntityManagerInterface $manager)
     {
-        $task->toggle(!$task->isDone());
+        $task->setIsDone(!$task->getIsDone());
         $manager->flush();
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));

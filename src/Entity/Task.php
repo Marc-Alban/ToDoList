@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -65,12 +66,12 @@ class Task
         return $this;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt)
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -82,7 +83,7 @@ class Task
         return $this->title;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -94,24 +95,14 @@ class Task
         return $this->content;
     }
 
-    public function setContent(string $content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
 
-    public function isDone(): ?bool
-    {
-        return $this->isDone;
-    }
 
-    public function toggle($flag)
-    {
-        $this->isDone = $flag;
-
-        return $this;
-    }
 
     public function getUser(): ?User
     {
@@ -121,6 +112,26 @@ class Task
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of isDone
+     */ 
+    public function getIsDone(): ?bool
+    {
+        return $this->isDone;
+    }
+
+    /**
+     * Set the value of isDone
+     *
+     * @return  self
+     */ 
+    public function setIsDone($isDone): self
+    {
+        $this->isDone = $isDone;
 
         return $this;
     }
