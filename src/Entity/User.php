@@ -67,16 +67,15 @@ class User implements UserInterface
         return $this->username;
     }
 
-    public function setUsername(string $username)
+    public function setUsername(string $username): self
     {
         $this->username = $username;
 
         return $this;
     }
 
-    public function getSalt()
+    public function getSalt(): void
     {
-        return null;
     }
 
     public function getPassword(): ?string
@@ -84,7 +83,7 @@ class User implements UserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password)
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -96,7 +95,7 @@ class User implements UserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -115,9 +114,8 @@ class User implements UserInterface
         return $this;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
-        return null;
     }
 
     public function getTasks(): Collection

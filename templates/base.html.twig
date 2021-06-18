@@ -36,11 +36,11 @@
         <div class="container">
             <div class="row">
                 {% if app.user %}
-                <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
                 <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
                 {% endif %}
 
                 {% if not app.user %}
+                <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
                 <a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
                 {% endif %}
             </div>

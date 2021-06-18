@@ -18,7 +18,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 
         for($i = 1; $i <= 20; $i++){
             $task = new Task;
-            $task->setUser($this->getReference('user-'.mt_rand(1, 3)));
+            $task->setUser($this->getReference('user-'.mt_rand(1, 2)));
             $task->setContent($faker->paragraph(2));
             $task->setTitle($faker->sentence());
             $task->setCreatedAt($faker->dateTimeBetween('-6 months'));
