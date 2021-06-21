@@ -3,42 +3,45 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-
 use App\Form\TaskType;
-
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TaskController extends AbstractController
 {
-
+    private array $task;
     /**
      * @Route("/tasks", name="task_list")
      */
     public function listAction(TaskRepository $taskRepository): Response
     {
-        $task = $taskRepository->findByIdUserAndIsDoneFalse($this->getUser()->getId());
-        return $this->render('task/list.html.twig', ['tasks' =>$task]);
+        if ($this->getUser()) {
+            $this->task = $taskRepository->findByIdUserAndIsDoneFalse($this->getUser());
+        }
+        return $this->render('task/list.html.twig', ['tasks' => $this->task]);
     }
 
     /**
      * @Route("/tasks/done", name="task_list_done")
      */
-     public function listDone(TaskRepository $taskRepository): Response
-     {
-        $task = $taskRepository->findByIdUserAndIsDoneTrue($this->getUser()->getId());
-        return $this->render('task/isDone.html.twig', ['tasks' => $task]);
-     }
+    public function listDone(TaskRepository $taskRepository): Response
+    {
+        if ($this->getUser()) {
+            $this->task = $taskRepository->findByIdUserAndIsDoneTrue($this->getUser());
+        }
+        return $this->render('task/isDone.html.twig', ['tasks' => $this->task]);
+    }
 
-     
+
     /**
      * @Route("/tasks/create", name="task_create")
      */
-    public function createAction(Request $request,EntityManagerInterface $manager): Response
+    public function createAction(Request $request, EntityManagerInterface $manager): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -46,7 +49,6 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $task->setUser($this->getUser());
             $manager->persist($task);
             $manager->flush();
@@ -62,7 +64,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/edit", name="task_edit")
      */
-    public function editAction(Task $task, Request $request,EntityManagerInterface $manager): Response
+    public function editAction(Task $task, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(TaskType::class, $task);
 
@@ -88,7 +90,7 @@ class TaskController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return RedirectResponse
      */
-    public function toggleTaskAction(Task $task,EntityManagerInterface $manager)
+    public function toggleTaskAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
         $task->setIsDone(!$task->getIsDone());
         $manager->flush();
@@ -104,7 +106,7 @@ class TaskController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return RedirectResponse
      */
-    public function deleteTaskAction(Task $task,EntityManagerInterface $manager)
+    public function deleteTaskAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
         $manager->remove($task);
         $manager->flush();

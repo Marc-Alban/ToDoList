@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use DateTime;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -17,35 +18,35 @@ class Task
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private Datetime $createdAt;
 
     /**
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="Vous devez saisir un titre.")
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank(message="Vous devez saisir du contenu.")
      */
-    private $content;
+    private string $content;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isDone;
+    private bool $isDone;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tasks")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private User $user;
 
     public function __construct()
     {
@@ -59,7 +60,7 @@ class Task
     }
 
     // Only used for test fixtures
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -118,7 +119,7 @@ class Task
 
     /**
      * Get the value of isDone
-     */ 
+     */
     public function getIsDone(): ?bool
     {
         return $this->isDone;
@@ -128,8 +129,8 @@ class Task
      * Set the value of isDone
      *
      * @return  self
-     */ 
-    public function setIsDone($isDone): self
+     */
+    public function setIsDone(?bool $isDone): self
     {
         $this->isDone = $isDone;
 
