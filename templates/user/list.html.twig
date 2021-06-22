@@ -5,6 +5,13 @@
 {% block header_title %}<h1>List of users</h1>{% endblock %}
 
 {% block body %}
+    <div class="p-2">
+        <a href="{{ path('homepage') }}" >
+        <button class="btn btn-primary">
+        Return to homepage
+        </button>
+        </a>
+    </div>
     {% if users|length == 0 %}
         <div class="alert alert-warning" role="alert">
            There is no registered user yet. <a href="{{ path('user_create') }}" class="btn btn-warning pull-right">create a user</a>

@@ -37,6 +37,9 @@
             <div class="row">
                 {% if app.user %}
                 <a href="{{ path('logout') }}" class="pull-right btn btn-danger">log out</a>
+                    {% if is_granted('ROLE_ADMIN') == true %}
+                        <a href="{{ path('user_list') }}" class="pull-right btn btn-warning">list user</a>
+                    {% endif %}
                 {% endif %}
 
                 {% if not app.user %}

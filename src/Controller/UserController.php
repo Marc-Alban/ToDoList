@@ -19,7 +19,10 @@ class UserController extends AbstractController
      */
     public function listAction(UserRepository $userRepository): Response
     {
-        return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
+        if ($this->isGranted("ROLE_ADMIN")) {
+            return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
+        }
+        return $this->redirectToRoute('homepage');
     }
 
 
@@ -34,18 +37,13 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //seul les admins peuvent changer le role d'un utilisateur
-            if ($this->isGranted("ROLE_ADMIN")) {
                 $user->setRoles($user->getRoles());
                 $user->setPassword($encoder->hashPassword($user, $user->getPassword()));
                 $manager->persist($user);
                 $manager->flush();
-            }
             $this->addFlash('success', "The user has been added successfully.");
-
-            return $this->redirectToRoute('user_list');
+            return $this->redirectToRoute('homepage');
         }
-
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
@@ -55,23 +53,21 @@ class UserController extends AbstractController
      */
     public function editAction(User $user, Request $request, UserPasswordHasherInterface $encoder, EntityManagerInterface $manager): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $form = $this->createForm(UserType::class, $user);
+            $form->handleRequest($request);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setRoles($user->getRoles());
-            $password = $encoder->hashPassword($user, $user->getPassword());
-            $user->setPassword($password);
-            $manager->persist($user);
-            $manager->flush();
-
-            $this->addFlash('success', "The user has been modified");
-            if ($this->isGranted('ROLE_ADMIN')) {
-                return $this->redirectToRoute('user_list');
+            if ($form->isSubmitted() && $form->isValid()) {
+                $user->setRoles($user->getRoles());
+                $password = $encoder->hashPassword($user, $user->getPassword());
+                $user->setPassword($password);
+                $manager->persist($user);
+                $manager->flush();
+                $this->addFlash('success', "The user has been modified"); 
             }
+            return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
         }
-
-        return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
+        return $this->redirectToRoute('homepage');
+ 
     }
 }

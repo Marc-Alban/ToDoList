@@ -108,8 +108,8 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
-        $manager->remove($task);
-        $manager->flush();
+            $manager->remove($task);
+            $manager->flush();
 
         $this->addFlash('success', 'The task has been removed.');
 
