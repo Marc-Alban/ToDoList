@@ -8,7 +8,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>To Do List app</title>
+        <title>To Do List</title>
 
         <!-- Custom CSS -->
         {{ encore_entry_link_tags('app') }}
@@ -36,17 +36,28 @@
         <div class="container">
             <div class="row">
                 {% if app.user %}
-                <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
+                <a href="{{ path('logout') }}" class="pull-right btn btn-danger">log out</a>
                 {% endif %}
 
                 {% if not app.user %}
-                <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
-                <a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
+                <a href="{{ path('user_create') }}" class="btn btn-primary">Create a user</a>
+                <a href="{{ path('login') }}" class="btn btn-success">log in</a>
                 {% endif %}
             </div>
 
             <div class="row">
                 <div class="col-md-12">
+                    {% for flash_message in app.session.flashBag.get('success') %}
+                        <div class="alert alert-success" role="alert">
+                            <strong>Superb !</strong> {{ flash_message }}
+                        </div>
+                    {% endfor %}
+
+                    {% for flash_message in app.session.flashBag.get('error') %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Oops !</strong> {{ flash_message }}
+                        </div>
+                    {% endfor %}
                     {% block headerimg %}<img class="slide-image" src="{{ asset('img/todolist_homepage.jpg') }}" alt="todo list">{% endblock %}
                 </div>
             </div>

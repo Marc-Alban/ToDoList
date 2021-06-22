@@ -41,7 +41,7 @@ class UserController extends AbstractController
                 $manager->persist($user);
                 $manager->flush();
             }
-            $this->addFlash('success', "L'utilisateur a bien été ajouté.");
+            $this->addFlash('success', "The user has been added successfully.");
 
             return $this->redirectToRoute('user_list');
         }
@@ -66,7 +66,7 @@ class UserController extends AbstractController
             $manager->persist($user);
             $manager->flush();
 
-            $this->addFlash('success', "L'utilisateur a bien été modifié");
+            $this->addFlash('success', "The user has been modified");
             if ($this->isGranted('ROLE_ADMIN')) {
                 return $this->redirectToRoute('user_list');
             }

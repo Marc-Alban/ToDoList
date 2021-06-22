@@ -3,17 +3,19 @@
 namespace App\Entity;
 
 use App\Entity\Task;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+
 /**
  * @ORM\Table("user")
  * @ORM\Entity
- * @UniqueEntity("email")
+ * @UniqueEntity(fields="email", message="Email already used")
+ * @UniqueEntity(fields="username", message="Username already used.")
  */
 class User implements UserInterface
 {
@@ -26,12 +28,17 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
-     * @Assert\NotBlank(message="Vous devez saisir un nom d'utilisateur.")
+     * @Assert\NotBlank(message="You must enter a username.")
      */
     private string $username;
 
     /**
      * @ORM\Column(type="string", length=64)
+    * @Assert\Length(max=4096)
+     * @Assert\Regex(
+     *      pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}$/",
+     *      message="The password must be at least 6 characters long, lowercase, uppercase and numeric."
+     * )
      */
     private string $password;
 
