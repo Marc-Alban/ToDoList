@@ -20,10 +20,7 @@ class TaskController extends AbstractController
      */
     public function listAction(TaskRepository $taskRepository): Response
     {
-        if ($this->getUser()) {
-            $this->task = $taskRepository->findByIdUserAndIsDoneFalse($this->getUser());
-        }
-        return $this->render('task/list.html.twig', ['tasks' => $this->task]);
+        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findBy(['isDone'=>false])]);
     }
 
     /**
@@ -31,10 +28,7 @@ class TaskController extends AbstractController
      */
     public function listDone(TaskRepository $taskRepository): Response
     {
-        if ($this->getUser()) {
-            $this->task = $taskRepository->findByIdUserAndIsDoneTrue($this->getUser());
-        }
-        return $this->render('task/isDone.html.twig', ['tasks' => $this->task]);
+        return $this->render('task/isDone.html.twig', ['tasks' => $taskRepository->findBy(['isDone'=>true])]);
     }
 
 
@@ -66,6 +60,7 @@ class TaskController extends AbstractController
      */
     public function editAction(Task $task, Request $request, EntityManagerInterface $manager): Response
     {
+        $this->denyAccessUnlessGranted('EDIT', $task);
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -92,6 +87,7 @@ class TaskController extends AbstractController
      */
     public function toggleTaskAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
+        $this->denyAccessUnlessGranted('EDIT', $task);
         $task->setIsDone(!$task->getIsDone());
         $manager->flush();
 
@@ -108,6 +104,7 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
+            $this->denyAccessUnlessGranted('DELETE', $task);
             $manager->remove($task);
             $manager->flush();
 

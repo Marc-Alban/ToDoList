@@ -19,31 +19,4 @@ class TaskRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Task::class);
     }
-
-    public function findByIdUserAndIsDoneFalse(User $user): array
-    {
-
-        return $this->createQueryBuilder('t')
-        ->andWhere('t.user = :val')
-        ->setParameter('val', $user)
-        ->andWhere('t.isDone = false')
-        ->orderBy('t.id', 'ASC')
-        ->getQuery()
-        ->getResult()
-        ;
-    }
-
-
-
-    public function findByIdUserAndIsDoneTrue(User $user): array
-    {
-        return $this->createQueryBuilder('t')
-        ->andWhere('t.user = :val')
-        ->setParameter('val', $user)
-        ->andWhere('t.isDone = true')
-        ->orderBy('t.id', 'ASC')
-        ->getQuery()
-        ->getResult()
-        ;
-    }
 }

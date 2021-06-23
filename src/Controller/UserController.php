@@ -53,6 +53,7 @@ class UserController extends AbstractController
      */
     public function editAction(User $user, Request $request, UserPasswordHasherInterface $encoder, EntityManagerInterface $manager): Response
     {
+        $this->denyAccessUnlessGranted('EDIT', $user);
         if ($this->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(UserType::class, $user);
             $form->handleRequest($request);
@@ -69,5 +70,19 @@ class UserController extends AbstractController
         }
         return $this->redirectToRoute('homepage');
  
+    }
+
+    /**
+     * @Route("/users/{id}/delete", name="user_delete")
+     */
+    public function deleteTaskAction(User $user, EntityManagerInterface $manager): Response
+    {
+            $this->denyAccessUnlessGranted('DELETE', $user);
+            $manager->remove($user);
+            $manager->flush();
+
+        $this->addFlash('success', 'The user has been removed.');
+
+        return $this->redirectToRoute('user_list');
     }
 }

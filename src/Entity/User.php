@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 
 /**
@@ -17,7 +18,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(fields="email", message="Email already used")
  * @UniqueEntity(fields="username", message="Username already used.")
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Column(type="integer")
@@ -34,7 +35,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=64)
-    * @Assert\Length(max=4096)
+     * @Assert\Length(max=4096)
      * @Assert\Regex(
      *      pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}$/",
      *      message="The password must be at least 6 characters long, lowercase, uppercase and numeric."
@@ -85,6 +86,11 @@ class User implements UserInterface
     {
     }
 
+    public function getUserIdentifier(): ?string
+    {
+        return $this->username;
+
+    }
 
     public function getPassword(): ?string
     {
