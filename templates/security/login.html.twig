@@ -6,12 +6,12 @@
     {% endif %}
 
     <form class="login" action="{{ path('login_check') }}" method="post">
-        <label for="username">Nom d'utilisateur :</label>
+        <label for="username">UserName :</label>
         <input type="text" id="username" name="_username" value="{{ last_username }}" />
 
-        <label for="password">Mot de passe :</label>
+        <label for="password">Password :</label>
         <input type="password" id="password" name="_password" />
 
-        <button class="btn btn-success" type="submit">Se connecter</button>
+        <button class="btn btn-success" type="submit">login</button>
     </form>
 {% endblock %}

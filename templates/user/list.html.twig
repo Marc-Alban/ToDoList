@@ -2,12 +2,19 @@
 
 {% block header_img %}{% endblock %}
 
-{% block header_title %}<h1>Liste des utilisateurs</h1>{% endblock %}
+{% block header_title %}<h1>List of users</h1>{% endblock %}
 
 {% block body %}
+    <div class="p-2">
+        <a href="{{ path('homepage') }}" >
+        <button class="btn btn-primary">
+        Return to homepage
+        </button>
+        </a>
+    </div>
     {% if users|length == 0 %}
         <div class="alert alert-warning" role="alert">
-            Il n'y a pas encore d'utilisateur enregistré. <a href="{{ path('user_create') }}" class="btn btn-warning pull-right">Créer un utilisateur</a>
+           There is no registered user yet. <a href="{{ path('user_create') }}" class="btn btn-warning pull-right">create a user</a>
         </div>
     {% else %}
         <div class="row">
@@ -15,8 +22,8 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Nom d'utilisateur</th>
-                    <th>Adresse d'utilisateur</th>
+                    <th>username</th>
+                    <th>user address</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -27,7 +34,12 @@
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
                         <td>
+                        {% if is_granted('EDIT', user) %}
                             <a href="{{ path('user_edit', {'id' : user.id}) }}" class="btn btn-success btn-sm">Edit</a>
+                        {% endif %}
+                        {% if is_granted('DELETE', user) %}
+                            <a href="{{ path('user_delete', {'id' : user.id}) }}" class="btn btn-warning btn-sm">Delete</a>
+                        {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

@@ -11,14 +11,14 @@ use Doctrine\Persistence\ObjectManager;
 
 class TaskFixtures extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $faker = new Factory;
+        $faker = new Factory();
         $faker = $faker::create('fr_FR');
 
-        for($i = 1; $i <= 20; $i++){
-            $task = new Task;
-            $task->setUser($this->getReference('user-'.mt_rand(1, 2)));
+        for ($i = 1; $i <= 20; $i++) {
+            $task = new Task();
+            $task->setUser($this->getReference('user-' . mt_rand(1, 3)));
             $task->setContent($faker->paragraph(2));
             $task->setTitle($faker->sentence());
             $task->setCreatedAt($faker->dateTimeBetween('-6 months'));
@@ -34,7 +34,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
      *
      * @return array
      */
-    public function getDependencies() : array
+    public function getDependencies(): array
     {
         return array(
             UserFixtures::class,

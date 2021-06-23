@@ -12,7 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-
 class UserController extends AbstractController
 {
     /**
@@ -20,14 +19,17 @@ class UserController extends AbstractController
      */
     public function listAction(UserRepository $userRepository): Response
     {
-        return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
+        if ($this->isGranted("ROLE_ADMIN")) {
+            return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
+        }
+        return $this->redirectToRoute('homepage');
     }
 
 
     /**
      * @Route("/users/create", name="user_create")
      */
-    public function createAction(Request $request,UserPasswordHasherInterface $encoder,EntityManagerInterface $manager): Response
+    public function createAction(Request $request, UserPasswordHasherInterface $encoder, EntityManagerInterface $manager): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -35,19 +37,13 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            //seul les admins peuvent changer le role d'un utilisateur
-            if($this->isGranted("ROLE_ADMIN")){
-            $user->setRoles($user->getRoles());
-            $user->setPassword($encoder->hashPassword($user,$user->getPassword()));
-            $manager->persist($user);
-            $manager->flush();
+                $user->setRoles($user->getRoles());
+                $user->setPassword($encoder->hashPassword($user, $user->getPassword()));
+                $manager->persist($user);
+                $manager->flush();
+            $this->addFlash('success', "The user has been added successfully.");
+            return $this->redirectToRoute('homepage');
         }
-            $this->addFlash('success', "L'utilisateur a bien été ajouté.");
-
-            return $this->redirectToRoute('user_list');
-        }
-
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
@@ -55,24 +51,38 @@ class UserController extends AbstractController
     /**
      * @Route("/users/{id}/edit", name="user_edit")
      */
-    public function editAction(User $user, Request $request,UserPasswordHasherInterface $encoder,EntityManagerInterface $manager): Response
+    public function editAction(User $user, Request $request, UserPasswordHasherInterface $encoder, EntityManagerInterface $manager): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $this->denyAccessUnlessGranted('EDIT', $user);
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $form = $this->createForm(UserType::class, $user);
+            $form->handleRequest($request);
 
-        $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $user->setRoles($user->getRoles());
+                $password = $encoder->hashPassword($user, $user->getPassword());
+                $user->setPassword($password);
+                $manager->persist($user);
+                $manager->flush();
+                $this->addFlash('success', "The user has been modified"); 
+            }
+            return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
+        }
+        return $this->redirectToRoute('homepage');
+ 
+    }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setRoles($user->getRoles());
-            $password = $encoder->hashPassword($user,$user->getPassword());
-            $user->setPassword($password);
-            $manager->persist($user);
+    /**
+     * @Route("/users/{id}/delete", name="user_delete")
+     */
+    public function deleteTaskAction(User $user, EntityManagerInterface $manager): Response
+    {
+            $this->denyAccessUnlessGranted('DELETE', $user);
+            $manager->remove($user);
             $manager->flush();
 
-            $this->addFlash('success', "L'utilisateur a bien été modifié");
-            if($this->isGranted('ROLE_ADMIN'))
-                return $this->redirectToRoute('user_list');
-        }
+        $this->addFlash('success', 'The user has been removed.');
 
-        return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
+        return $this->redirectToRoute('user_list');
     }
 }

@@ -2,10 +2,20 @@
 
 {% block body %}
     <div class="row edit-task">
-        {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
+            <div class="p-2">
+                <a href="{{ path('task_list') }}" >
+                <button class="btn btn-primary">
+                Return to Assignment List
+                </button>
+                </a>
+            </div>
+            <div class="mr-auto w-100 p-2">
+            {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
             {{ form_widget(form) }}
-
-            <button type="submit" class="btn btn-success pull-right">Modifier</button>
-        {{ form_end(form) }}
+            {% if is_granted('EDIT', task) %}
+            <button type="submit" class="btn btn-success pull-right">Update</button>
+            {% endif %}
+            {{ form_end(form) }}
+            </div>
     </div>
 {% endblock %}

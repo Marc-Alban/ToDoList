@@ -9,48 +9,56 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 
 /**
  * @ORM\Table("user")
  * @ORM\Entity
- * @UniqueEntity("email")
+ * @UniqueEntity(fields="email", message="Email already used")
+ * @UniqueEntity(fields="username", message="Username already used.")
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
-     * @Assert\NotBlank(message="Vous devez saisir un nom d'utilisateur.")
+     * @Assert\NotBlank(message="You must enter a username.")
      */
-    private $username;
+    private string $username;
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Assert\Length(max=4096)
+     * @Assert\Regex(
+     *      pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}$/",
+     *      message="The password must be at least 6 characters long, lowercase, uppercase and numeric."
+     * )
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
      * @Assert\NotBlank(message="Vous devez saisir une adresse email.")
      * @Assert\Email(message="Le format de l'adresse n'est pas correcte.")
      */
-    private $email;
+    private string $email;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="user", orphanRemoval=true)
      */
-    private $tasks;
+    private Collection $tasks;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="array")
      */
-    private $roles = [];
+    private array $roles = [];
 
     public function __construct()
     {
@@ -76,6 +84,12 @@ class User implements UserInterface
 
     public function getSalt(): void
     {
+    }
+
+    public function getUserIdentifier(): ?string
+    {
+        return $this->username;
+
     }
 
     public function getPassword(): ?string
@@ -107,7 +121,7 @@ class User implements UserInterface
         return $this->roles;
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles(?array $roles): self
     {
         $this->roles = $roles;
 

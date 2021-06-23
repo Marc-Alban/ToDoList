@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block header_title %}<h1>Créer un utilisateur</h1>{% endblock %}
+{% block header_title %}<h1>Create a user</h1>{% endblock %}
 {% block header_img %}{% endblock %}
 
 {% block body %}
@@ -9,7 +9,7 @@
             {{ form_row(form.password) }}
             {{ form_row(form.email) }}
             {{ form_row(form.roles) }}
-            <button type="submit" class="btn btn-success pull-right">Ajouter</button>
+            <button type="submit" class="btn btn-success pull-right">Add</button>
         {{ form_end(form) }}
     </div>
 {% endblock %}
