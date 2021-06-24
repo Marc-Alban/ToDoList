@@ -2,34 +2,25 @@
 
 namespace App\Tests\Controller;
 
+use App\Tests\logTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SecurityControllerTest extends WebTestCase
 {
+    use logTrait;
+
     public function testLogin()
     {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/login');
-        static::assertSame(200, $client->getResponse()->getStatusCode());
-
-        // Test if login field exists
-        static::assertSame(1, $crawler->filter('input[name="_username"]')->count());
-        static::assertSame(1, $crawler->filter('input[name="_password"]')->count());
-
-        $form = $crawler->selectButton('Se connecter')->form();
-        $form['_username'] = 'user';
-        $form['_password'] = 'test';
-        $client->submit($form); 
-
-        // $crawler = $client->followRedirect();
-        static::assertSame(200, $client->getResponse()->getStatusCode());
-
-        // // Test if home page text when authenticated exists
-        // static::assertSame("Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !", $crawler->filter('h1')->text());
-        
-        // Return the client to reuse the authenticated user it in others functionnal tests
-        return $client;
+        $this->loginUser();
+        $this->client->request('GET', '/');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
+    public function testLogOut()
+    {
+        $this->loginUser();
+        $crawler = $this->client->request('GET', '/');
+        $crawler->selectLink('log out')->link();
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
 }
