@@ -27,18 +27,14 @@ class UserVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case 'EDIT':
-                if($user === $subject){
-                    return true;
-                }
-                if($subject->getUserName() == 'anonymous' && $user->getRoles() === ['ROLE_ADMIN']){
+                if ($user === $subject || $user->getRoles() === ['ROLE_ADMIN']) {
                     return true;
                 }
                 break;
             case 'DELETE':
-                if($user === $subject){
+                if ($user === $subject) {
                     return false;
-                }
-                if($subject->getUserName() == 'anonymous' && $user->getRoles() === ['ROLE_ADMIN']){
+                } elseif ($user->getRoles() === ['ROLE_ADMIN']) {
                     return true;
                 }
                 break;

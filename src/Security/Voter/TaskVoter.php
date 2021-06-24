@@ -25,24 +25,24 @@ class TaskVoter extends Voter
             return false;
         }
 
-        if(null == $task->getUser()){
+        if (null == $task->getUser()) {
             return false;
         }
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case 'EDIT':
-                    if($task->getUser()->getId() === $user->getId()){
-                        return true;
-                    }
+                if ($task->getUser()->getId() === $user->getId()) {
+                    return true;
+                }
                 break;
             case 'DELETE':
-                    if($task->getUser()->getId() === $user->getId()){
-                        return true;
-                    }
-                    if($task->getUser()->getUsername() === 'anonymous'  && $user->getRoles() === ['ROLE_ADMIN']){
-                        return true;
-                    }
+                if ($task->getUser()->getId() === $user->getId()) {
+                    return true;
+                }
+                if ($task->getUser()->getUsername() === 'anonymous'  && $user->getRoles() === ['ROLE_ADMIN']) {
+                    return true;
+                }
                 break;
         }
 

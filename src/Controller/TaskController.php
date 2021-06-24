@@ -14,13 +14,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TaskController extends AbstractController
 {
-    private array $task;
     /**
      * @Route("/tasks", name="task_list")
      */
     public function listAction(TaskRepository $taskRepository): Response
     {
-        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findBy(['isDone'=>false])]);
+        return $this->render('task/list.html.twig', ['tasks' => $taskRepository->findBy(['isDone' => false])]);
     }
 
     /**
@@ -28,7 +27,7 @@ class TaskController extends AbstractController
      */
     public function listDone(TaskRepository $taskRepository): Response
     {
-        return $this->render('task/isDone.html.twig', ['tasks' => $taskRepository->findBy(['isDone'=>true])]);
+        return $this->render('task/isDone.html.twig', ['tasks' => $taskRepository->findBy(['isDone' => true])]);
     }
 
 
@@ -81,11 +80,8 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
-     * @param Task $task
-     * @param EntityManagerInterface $manager
-     * @return RedirectResponse
      */
-    public function toggleTaskAction(Task $task, EntityManagerInterface $manager): RedirectResponse
+    public function toggleAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
         $this->denyAccessUnlessGranted('EDIT', $task);
         $task->setIsDone(!$task->getIsDone());
@@ -98,11 +94,8 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
-     * @param Task $task
-     * @param EntityManagerInterface $manager
-     * @return RedirectResponse
      */
-    public function deleteTaskAction(Task $task, EntityManagerInterface $manager): RedirectResponse
+    public function deleteAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
             $this->denyAccessUnlessGranted('DELETE', $task);
             $manager->remove($task);
