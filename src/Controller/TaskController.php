@@ -81,7 +81,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
      */
-    public function toggleTaskAction(Task $task, EntityManagerInterface $manager): RedirectResponse
+    public function toggleAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
         $this->denyAccessUnlessGranted('EDIT', $task);
         $task->setIsDone(!$task->getIsDone());
@@ -95,7 +95,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
      */
-    public function deleteTaskAction(Task $task, EntityManagerInterface $manager): RedirectResponse
+    public function deleteAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
             $this->denyAccessUnlessGranted('DELETE', $task);
             $manager->remove($task);

@@ -58,7 +58,7 @@ class TaskControllerTest extends WebTestCase
     }
 
 
-    public function testToggleTaskAction(): void
+    public function testToggleAction(): void
     {
         $this->loginUser();
         $this->client->request('GET', '/tasks/8/toggle');

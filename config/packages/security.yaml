@@ -28,6 +28,11 @@ security:
             entry_point: form_login
             logout: ~
 
+             # configure the maximum login attempts in a custom period of time
+            login_throttling:
+                max_attempts: 3
+                interval: '15 minutes'
+
             # activate different ways to authenticate
 
             # http_basic: true
