@@ -11,7 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-
 /**
  * @ORM\Table("user")
  * @ORM\Entity
@@ -89,7 +88,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): ?string
     {
         return $this->username;
-
     }
 
     public function getPassword(): ?string

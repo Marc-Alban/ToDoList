@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Tests;
 
@@ -8,7 +8,7 @@ trait logTrait
 
     public function setUp(): void
     {
-        $this->client = static::createClient();        
+        $this->client = static::createClient();
     }
 
     private function loginUser()

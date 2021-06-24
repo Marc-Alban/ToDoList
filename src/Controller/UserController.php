@@ -64,12 +64,11 @@ class UserController extends AbstractController
                 $user->setPassword($password);
                 $manager->persist($user);
                 $manager->flush();
-                $this->addFlash('success', "The user has been modified"); 
+                $this->addFlash('success', "The user has been modified");
             }
             return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
         }
         return $this->redirectToRoute('homepage');
- 
     }
 
     /**

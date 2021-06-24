@@ -13,28 +13,28 @@ class TaskControllerTest extends WebTestCase
     {
         $this->loginUser();
         $this->client->request('GET', '/tasks');
-        $this->assertEquals(200,$this->client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     public function testListDone(): void
     {
         $this->loginUser();
         $this->client->request('GET', '/tasks/done');
-        $this->assertEquals(200,$this->client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     public function testCreateAction(): void
     {
         $this->loginUser();
         $crawler = $this->client->request('GET', '/tasks/create');
-        $this->assertEquals(200,$this->client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $crawler->selectButton('Add')->form();
         $form['task[title]'] = 'The title';
         $form['task[content]'] = 'The content of body';
         $this->client->submit($form);
 
-        $this->assertEquals(302,$this->client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
         $crawler = $this->client->followRedirect();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals(1, $crawler->filter('div.alert-success')->count());
@@ -68,7 +68,6 @@ class TaskControllerTest extends WebTestCase
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals(1, $crawler->filter('div.alert-success')->count());
-
     }
 
     public function testDeleteAction()
