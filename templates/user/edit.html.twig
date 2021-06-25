@@ -5,11 +5,13 @@
 
 {% block body %}
     <div class="p-2">
+        {% if is_granted('ROLE_ADMIN') == true %}
         <a href="{{ path('user_list') }}" >
         <button class="btn btn-primary">
         Return to Users List
         </button>
         </a>
+        {% endif %}
         <a href="{{ path('homepage') }}" >
         <button class="btn btn-primary">
         Return to homepage

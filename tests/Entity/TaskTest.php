@@ -1,57 +1,28 @@
 <?php
 
-
 namespace App\Tests\Entity;
-
 
 use App\Entity\Task;
 use App\Entity\User;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TaskTest extends WebTestCase
 {
-    private $task;
-    private $user;
-
-    public function setUp(): void
+    public function testEntityTask()
     {
-        $this->task = new Task();
-        $this->user = new User();
-    }
+        $task = new Task();
+        $task->setTitle('A title');
+        $task->setContent('A great content!');
+        $task->setCreatedAt(new \Datetime('2021-10-20'));
+        $task->setIsDone(true);
+        $user = new User();
+        $task->setUser($user);
 
-    public function testId(): void
-    {
-        $this->assertNotNull($this->task->getId());
+        $this->assertEquals('A title', $task->getTitle());
+        $this->assertEquals('A great content!', $task->getContent());
+        $this->assertEquals(new DateTime('2021-10-20'), $task->getCreatedAt());
+        $this->assertTrue($task->getIsDone());
+        $this->assertEquals($user, $task->getUser());
     }
-
-    public function testTitle()
-    {
-        $this->task->setTitle('title');
-        $this->assertSame('title', $this->task->getTitle());
-    }
-
-    public function testContent()
-    {
-        $this->task->setContent('content');
-        $this->assertSame('content', $this->task->getContent());
-    }
-
-    public function testIsDone()
-    {
-        $this->task->setIsDone(true);
-        $this->assertSame(true, $this->task->getIsDone());
-    }
-
-    public function testCreatedAt()
-    {
-        $date = new \DateTime();
-        $this->task->setCreatedAt($date);
-        $this->assertSame($date, $this->task->getCreatedAt());
-    }
-
-    public function testUser()
-    {
-        $this->assertInstanceOf($this->user, $this->task->getUser());
-    }
-
 }
