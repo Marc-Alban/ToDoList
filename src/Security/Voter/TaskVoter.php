@@ -40,7 +40,7 @@ class TaskVoter extends Voter
                 if ($task->getUser()->getId() === $user->getId()) {
                     return true;
                 }
-                if ($task->getUser()->getUsername() === 'anonymous'  && $user->getRoles() === ['ROLE_ADMIN']) {
+                if ($user->getRoles() === ['ROLE_ADMIN']) {
                     return true;
                 }
                 break;

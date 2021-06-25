@@ -43,7 +43,7 @@ class TaskControllerTest extends WebTestCase
     public function testEditAction(): void
     {
         $this->loginUser();
-        $crawler = $this->client->request('GET', '/tasks/8/edit');
+        $crawler = $this->client->request('GET', '/tasks/26/edit');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $crawler->selectButton('Update')->form();
@@ -61,7 +61,7 @@ class TaskControllerTest extends WebTestCase
     public function testToggleAction(): void
     {
         $this->loginUser();
-        $this->client->request('GET', '/tasks/8/toggle');
+        $this->client->request('GET', '/tasks/26/toggle');
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
         $crawler = $this->client->followRedirect();
@@ -73,7 +73,7 @@ class TaskControllerTest extends WebTestCase
     public function testDeleteAction()
     {
         $this->loginUser();
-        $this->client->request('GET', '/tasks/8/delete');
+        $this->client->request('GET', '/tasks/26/delete');
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
         $crawler = $this->client->followRedirect();
