@@ -54,7 +54,8 @@ class UserController extends AbstractController
     public function editAction(User $user, Request $request, UserPasswordHasherInterface $encoder, EntityManagerInterface $manager): Response
     {
         $this->denyAccessUnlessGranted('EDIT', $user);
-        if ($this->isGranted('ROLE_ADMIN')) {
+
+        if ($this->isGranted('ROLE_ADMIN') || $user->getId() === $this->getUser()->getId()) {
             $form = $this->createForm(UserType::class, $user);
             $form->handleRequest($request);
 
@@ -68,6 +69,7 @@ class UserController extends AbstractController
             }
             return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
         }
+     
         return $this->redirectToRoute('homepage');
     }
 
