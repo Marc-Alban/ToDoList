@@ -69,7 +69,7 @@ class UserController extends AbstractController
             }
             return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
         }
-     
+
         return $this->redirectToRoute('homepage');
     }
 
