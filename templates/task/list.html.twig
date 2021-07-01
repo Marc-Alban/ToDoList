@@ -26,7 +26,7 @@
                             </button>
                         </form>
                         <form action="{{ path('task_delete', {'id' : task.id }) }}">
-                            {% if is_granted('DELETE', task) %}
+                            {% if is_granted('Task_DELETE', task) %}
                             <button class="btn btn-danger btn-sm pull-right">Delete</button>
                             {% endif %}
                         </form>
