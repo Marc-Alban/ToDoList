@@ -2,7 +2,7 @@
 
 namespace App\Tests;
 
-trait logTrait
+trait LogTrait
 {
     private $client;
 

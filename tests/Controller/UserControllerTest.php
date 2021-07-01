@@ -43,7 +43,7 @@ class UserControllerTest extends WebTestCase
     {
         $this->loginUser();
 
-        $crawler = $this->client->request('GET', '/users/8/edit');
+        $crawler = $this->client->request('GET', '/users/4/edit');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         $form = $crawler->selectButton('Update')->form();
