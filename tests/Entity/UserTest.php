@@ -1,45 +1,35 @@
 <?php
 
-namespace App\Tests\Unit\Entity;
+namespace App\Tests\Entity;
 
 use App\Entity\Task;
 use App\Entity\User;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use PHPUnit\Framework\TestCase;
 
-class UserTest extends WebTestCase
+class UserTest extends TestCase
 {
-    const USERNAME = 'fatellim';
-    const EMAIL = 'fatellim@prmaster.fr';
-    const PASSWORD = 'password';
-    const ROLES = ['ROLE_USER'];
-
-    public function testGetterSetter(): void
+    public function testGet()
     {
         $user = new User();
 
-        $this->assertInstanceOf(User::class, $user);
-        $this->assertEquals(null, $user->getId());
-        $this->assertEquals(null, $user->getUsername());
-        $this->assertEquals(null, $user->getEmail());
-        $this->assertEquals(null, $user->getPassword());
-        $this->assertInstanceOf(Collection::class, $user->getTasks());
-        $this->assertEquals([], $user->getRoles());
-
-        $user->setUsername(self::USERNAME);
-        $this->assertEquals(self::USERNAME, $user->getUsername());
-        $user->setEmail(self::EMAIL);
-        $this->assertEquals(self::EMAIL, $user->getEmail());
-        $user->setPassword(self::PASSWORD);
-        $this->assertEquals(self::PASSWORD, $user->getPassword());
-        $user->setRoles(self::ROLES);
-        $this->assertEquals(self::ROLES, $user->getRoles());
+        $user->setUsername('test');
+        $this->assertSame('test', $user->getUsername());
+        $user->setEmail('test@gmail.com');
+        $this->assertSame('test@gmail.com', $user->getEmail());
+        $user->setPassword('test');
+        $this->assertSame('test', $user->getPassword());
 
         $task = new Task();
-        $user->addTask($task);
-        $this->assertCount(1, $user->getTasks());
+        $user->eraseCredentials();
+        $this->assertNull($user->getSalt());
+        $this->assertInstanceOf(User::class, $user->addTask($task));
+        $this->assertInstanceOf(Collection::class, $user->getTasks());
+        $this->assertInstanceOf(User::class, $user->removeTask($task));
 
-        $user->removeTask($task);
-        $this->assertCount(0, $user->getTasks());
+        $this->assertSame(['ROLE_USER'], $user->getRoles());
+        $this->assertNull($user->setRoles(array('ROLE_ADMIN')));
+
     }
+
 }

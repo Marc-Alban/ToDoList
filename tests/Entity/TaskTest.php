@@ -1,40 +1,31 @@
 <?php
 
-namespace App\Tests\Unit\Entity;
+
+namespace App\Tests\Entity;
 
 use App\Entity\Task;
 use App\Entity\User;
-use DateTime;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use PHPUnit\Framework\TestCase;
 
-class TaskTest extends WebTestCase
+class TaskTest extends TestCase
 {
-    const TASK_TITLE = 'Ceci est une tâche';
-    const TASK_CONTENT = "Ceci est la description d'une tâche";
-
-    public function testGetterSetter(): void
+    public function testGet()
     {
         $task = new Task();
-
-        $this->assertInstanceOf(Task::class, $task);
-        $this->assertEquals(null, $task->getId());
-        $this->assertEquals(null, $task->getTitle());
-        $this->assertEquals(null, $task->getContent());
-        $this->assertEquals(null, $task->getAuthor());
-        $this->assertEquals(false, $task->isDone());
-        $this->assertEquals(null, $task->getCreatedAt());
-
-        $task->setTitle(self::TASK_TITLE);
-        $this->assertEquals(self::TASK_TITLE, $task->getTitle());
-        $task->setContent(self::TASK_CONTENT);
-        $this->assertEquals(self::TASK_CONTENT, $task->getContent());
-        $task->setCreatedAt(new DateTime());
-        $this->assertInstanceOf(DateTime::class, $task->getCreatedAt());
-        $task->toggle(!$task->isDone());
-        $this->assertTrue($task->isDone());
-
-        $user = new User();
-        $task->setAuthor($user);
-        $this->assertInstanceOf(User::class, $task->getAuthor());
+        $this->assertInstanceOf(Task::class, new Task());
+        $task->setTitle('test');
+        $title = $task->getTitle();
+        $this->assertInstanceOf(\DateTime::class, $task->getCreatedAt());
+        $task->setCreatedAt(new \DateTime('2011-01-01T15:03:01.012345Z'));
+        $date=new \DateTime('2011-01-01T15:03:01.012345Z');
+        $this->assertEquals($date, $task->getCreatedAt());
+        $this->assertSame('test', $title);
+        $task->setContent('test');
+        $content = $task->getContent();
+        $this->assertSame('test', $content);
+        $this->assertSame(false, $task->getIsDone());
+        $this->assertInstanceOf(Task::class, $task->setIsDone(false));
+        $this->assertInstanceOf(Task::class, $task->setUser(new User()));
+        $this->assertInstanceOf(User::class, $task->getUser());
     }
 }
