@@ -1,35 +1,45 @@
 <?php
 
-namespace App\Tests\Entity;
+namespace App\Tests\Unit\Entity;
 
 use App\Entity\Task;
 use App\Entity\User;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserTest extends WebTestCase
 {
-    use FixturesTrait;
+    const USERNAME = 'fatellim';
+    const EMAIL = 'fatellim@prmaster.fr';
+    const PASSWORD = 'password';
+    const ROLES = ['ROLE_USER'];
 
-    public function testEntityUser()
+    public function testGetterSetter(): void
     {
+        $user = new User();
 
-        // $user = new User();
-        // $user->setUserName('Jean-Paul');
-        // $user->setPassword('password');
-        // $this->assertNull($user->getSalt());
-        // $this->assertNull($user->eraseCredentials());
-        // $user->setEmail('name@name.fr');
-        // $user->setRoles(['ROLE_USER']);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals(null, $user->getId());
+        $this->assertEquals(null, $user->getUsername());
+        $this->assertEquals(null, $user->getEmail());
+        $this->assertEquals(null, $user->getPassword());
+        $this->assertInstanceOf(Collection::class, $user->getTasks());
+        $this->assertEquals([], $user->getRoles());
 
-        // // $tasks = new Task();
-        // // $tasks->setTitle('A title');
-        // // $tasks->setContent('A great content!');
-        // // $tasks->setCreatedAt(new \Datetime('2021-10-20'));
-        // // $tasks->setIsDone(true);
+        $user->setUsername(self::USERNAME);
+        $this->assertEquals(self::USERNAME, $user->getUsername());
+        $user->setEmail(self::EMAIL);
+        $this->assertEquals(self::EMAIL, $user->getEmail());
+        $user->setPassword(self::PASSWORD);
+        $this->assertEquals(self::PASSWORD, $user->getPassword());
+        $user->setRoles(self::ROLES);
+        $this->assertEquals(self::ROLES, $user->getRoles());
 
-        // $user->addTask($tasks);
-        //  $this->assertCount(1, $user->getTasks());
-        // // $user->removeTask($task);
-        //  $this->assertCount(0, $user->getTasks());
+        $task = new Task();
+        $user->addTask($task);
+        $this->assertCount(1, $user->getTasks());
+
+        $user->removeTask($task);
+        $this->assertCount(0, $user->getTasks());
     }
 }

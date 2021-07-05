@@ -15,6 +15,6 @@ class DefaultController extends AbstractController
     public function indexAction(UserRepository $userRepository): Response
     {
 
-        return $this->render('default/index.html.twig', ['user'=>$userRepository->findBy(['id'=>$this->getUser()->getId()])]);
+        return $this->render('default/index.html.twig', ['user' => $userRepository->findBy(['id' => $this->getUser()->getId()])]);
     }
 }

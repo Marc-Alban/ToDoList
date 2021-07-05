@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Entity;
+namespace App\Tests\Unit\Entity;
 
 use App\Entity\Task;
 use App\Entity\User;
@@ -9,20 +9,32 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TaskTest extends WebTestCase
 {
-    public function testEntityTask()
+    const TASK_TITLE = 'Ceci est une tâche';
+    const TASK_CONTENT = "Ceci est la description d'une tâche";
+
+    public function testGetterSetter(): void
     {
         $task = new Task();
-        $task->setTitle('A title');
-        $task->setContent('A great content!');
-        $task->setCreatedAt(new \Datetime('2021-10-20'));
-        $task->setIsDone(true);
-        $user = new User();
-        $task->setUser($user);
 
-        $this->assertEquals('A title', $task->getTitle());
-        $this->assertEquals('A great content!', $task->getContent());
-        $this->assertEquals(new DateTime('2021-10-20'), $task->getCreatedAt());
-        $this->assertTrue($task->getIsDone());
-        $this->assertEquals($user, $task->getUser());
+        $this->assertInstanceOf(Task::class, $task);
+        $this->assertEquals(null, $task->getId());
+        $this->assertEquals(null, $task->getTitle());
+        $this->assertEquals(null, $task->getContent());
+        $this->assertEquals(null, $task->getAuthor());
+        $this->assertEquals(false, $task->isDone());
+        $this->assertEquals(null, $task->getCreatedAt());
+
+        $task->setTitle(self::TASK_TITLE);
+        $this->assertEquals(self::TASK_TITLE, $task->getTitle());
+        $task->setContent(self::TASK_CONTENT);
+        $this->assertEquals(self::TASK_CONTENT, $task->getContent());
+        $task->setCreatedAt(new DateTime());
+        $this->assertInstanceOf(DateTime::class, $task->getCreatedAt());
+        $task->toggle(!$task->isDone());
+        $this->assertTrue($task->isDone());
+
+        $user = new User();
+        $task->setAuthor($user);
+        $this->assertInstanceOf(User::class, $task->getAuthor());
     }
 }

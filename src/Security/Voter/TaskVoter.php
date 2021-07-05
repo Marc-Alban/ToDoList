@@ -35,7 +35,7 @@ class TaskVoter extends Voter
                 if ($task->getUser()->getId() === $user->getId()) {
                     return true;
                 }
-                if ($user->getUsername() === 'admin' && $task->getUser()->getRoles() === [] ) {
+                if ($user->getUsername() === 'admin' && $task->getUser()->getRoles() === []) {
                     return true;
                 }
                 break;
@@ -44,7 +44,7 @@ class TaskVoter extends Voter
                     return true;
                 }
 
-                if ($user->getUsername() === 'admin' && $task->getUser()->getRoles() === [] ) {
+                if ($user->getUsername() === 'admin' && $task->getUser()->getRoles() === []) {
                     return true;
                 }
                 break;
