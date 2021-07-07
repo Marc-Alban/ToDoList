@@ -12,7 +12,7 @@ class UserVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['User_EDIT', 'User_DELETE'])
+        return in_array($attribute, ['USER_EDIT', 'USER_DELETE'])
             && $subject instanceof \App\Entity\User;
     }
 
@@ -26,12 +26,12 @@ class UserVoter extends Voter
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-            case 'User_EDIT':
+            case 'USER_EDIT':
                 if ($user === $subject || $user->getRoles() === ['ROLE_ADMIN']) {
                     return true;
                 }
                 break;
-            case 'User_DELETE':
+            case 'USER_DELETE':
                 if ($user === $subject) {
                     return false;
                 } elseif ($user->getRoles() === ['ROLE_ADMIN']) {

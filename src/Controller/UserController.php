@@ -53,7 +53,7 @@ class UserController extends AbstractController
      */
     public function editAction(User $user, Request $request, UserPasswordHasherInterface $encoder, EntityManagerInterface $manager): Response
     {
-        $this->denyAccessUnlessGranted('User_EDIT', $user);
+        $this->denyAccessUnlessGranted('USER_EDIT', $user);
 
         if ($this->isGranted('ROLE_ADMIN') || $user->getId() === $this->getUser()->getId()) {
             $form = $this->createForm(UserType::class, $user);
@@ -78,7 +78,7 @@ class UserController extends AbstractController
      */
     public function deleteAction(User $user, EntityManagerInterface $manager): Response
     {
-            $this->denyAccessUnlessGranted('User_DELETE', $user);
+            $this->denyAccessUnlessGranted('USER_DELETE', $user);
             $manager->remove($user);
             $manager->flush();
 

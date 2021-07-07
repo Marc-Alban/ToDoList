@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class TaskTest extends TestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $task = new Task();
         $this->assertInstanceOf(Task::class, new Task());

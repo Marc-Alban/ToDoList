@@ -8,7 +8,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 class TaskTypeTest extends TypeTestCase
 {
-    public function testTaskType()
+    public function testTaskType(): void
     {
 
         $formData = [

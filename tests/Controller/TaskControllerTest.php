@@ -3,9 +3,9 @@
 namespace App\Tests\Controller;
 
 use App\Tests\logTrait;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use PHPUnit\Framework\TestCase;
 
-class TaskControllerTest extends WebTestCase
+class TaskControllerTest extends TestCase
 {
     use logTrait;
 
@@ -70,7 +70,7 @@ class TaskControllerTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('div.alert-success')->count());
     }
 
-    public function testDeleteAction()
+    public function testDeleteAction(): void
     {
         $this->loginUser();
         $this->client->request('GET', '/tasks/21/delete');

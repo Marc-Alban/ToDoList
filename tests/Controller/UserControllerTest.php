@@ -9,14 +9,14 @@ class UserControllerTest extends WebTestCase
 {
     use logTrait;
 
-    public function testListAction()
+    public function testListAction(): void
     {
         $this->loginUser();
         $this->client->request('GET', '/users');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testCreateAction()
+    public function testCreateAction(): void
     {
         $this->loginUser();
 
@@ -39,7 +39,7 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('div.alert-success')->count());
     }
 
-    public function testUpdateAction()
+    public function testUpdateAction(): void
     {
         $this->loginUser();
 

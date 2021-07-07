@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $user = new User();
 
@@ -20,15 +20,17 @@ class UserTest extends TestCase
         $user->setPassword('test');
         $this->assertSame('test', $user->getPassword());
 
-        $task = new Task();
+        $task = $this->createMock(Task::class);
+        $task->method('getId')->willReturn(1);
+        
         $user->eraseCredentials();
         $this->assertNull($user->getSalt());
         $this->assertInstanceOf(User::class, $user->addTask($task));
         $this->assertInstanceOf(Collection::class, $user->getTasks());
         $this->assertInstanceOf(User::class, $user->removeTask($task));
 
-        $this->assertSame(['ROLE_USER'], $user->getRoles());
-        $this->assertNull($user->setRoles(array('ROLE_ADMIN')));
+        $user->setRoles(['ROLE_ADMIN']);
+        $this->assertSame(['ROLE_ADMIN'], $user->getRoles());
 
     }
 

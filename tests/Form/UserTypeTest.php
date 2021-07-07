@@ -8,7 +8,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 class UserTypeTest extends TypeTestCase
 {
-    public function testUserType()
+    public function testUserType(): void 
     {
         $formData = [
             'username' => 'test',
@@ -34,5 +34,4 @@ class UserTypeTest extends TypeTestCase
 
         $this->assertEquals($form->getData(), $formData2);
     }
-
 }

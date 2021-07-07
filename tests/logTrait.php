@@ -11,7 +11,7 @@ trait LogTrait
         $this->client = static::createClient();
     }
 
-    private function loginUser()
+    private function loginUser(): void
     {
         $crawler = $this->client->request('GET', '/login');
         $form = $crawler->selectButton('login')->form();

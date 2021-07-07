@@ -59,7 +59,7 @@ class TaskController extends AbstractController
      */
     public function editAction(Task $task, Request $request, EntityManagerInterface $manager): Response
     {
-        $this->denyAccessUnlessGranted('Task_EDIT', $task);
+        $this->denyAccessUnlessGranted('TASK_EDIT', $task);
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -83,7 +83,7 @@ class TaskController extends AbstractController
      */
     public function toggleAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
-        $this->denyAccessUnlessGranted('Task_EDIT', $task);
+        $this->denyAccessUnlessGranted('TASK_EDIT', $task);
         $task->setIsDone(!$task->getIsDone());
         $manager->flush();
 
@@ -97,7 +97,7 @@ class TaskController extends AbstractController
      */
     public function deleteAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
-            $this->denyAccessUnlessGranted('Task_DELETE', $task);
+            $this->denyAccessUnlessGranted('TASK_DELETE', $task);
             $manager->remove($task);
             $manager->flush();
 

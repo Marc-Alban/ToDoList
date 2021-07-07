@@ -9,14 +9,14 @@ class SecurityControllerTest extends WebTestCase
 {
     use logTrait;
 
-    public function testLogin()
+    public function testLogin(): void
     {
         $this->loginUser();
         $this->client->request('GET', '/');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testLogOut()
+    public function testLogOut(): void
     {
         $this->loginUser();
         $crawler = $this->client->request('GET', '/');
