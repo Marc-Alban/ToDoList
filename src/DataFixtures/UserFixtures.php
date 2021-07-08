@@ -21,37 +21,26 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // Admin
-        $user = new User();
-        $user->setUsername('admin')
-        ->setEmail('admin@admin.fr')
-        ->setRoles(['ROLE_ADMIN'])
-        ->setPassword($this->passwordHasher->hashPassword($user, 'root'));
-        $this->addReference('user-1', $user);
-        $manager->persist($user);
+        for ($i=1; $i <= 10; $i++) {
+            $user = new User();
+
+            $user->setUsername($i < 10 ?"User$i" : 'Admin')
+                ->setEmail($i < 10 ? "User$i@email.fr" : 'Admin@email.fr')
+                ->setPassword($i < 10 ? $this->passwordHasher->hashPassword($user, 'test') : $this->passwordHasher->hashPassword($user, 'root'))
+                ->setRoles($i < 10 ? ['ROLE_USER'] : ['ROLE_ADMIN'])
+            ;
+            $this->addReference('user-'.$i, $user);
+            $manager->persist($user);
+        }
+
+            $user2 = new User();
+            $user2->setUsername('anonymous')
+            ->setEmail('anonymous@gmail.com')
+            ->setPassword($this->passwordHasher->hashPassword($user2, 'test'))
+            ->setRoles(['']);
+            $this->addReference('user-11',$user2);
+            $manager->persist($user2);
+
         $manager->flush();
-
-
-        // User
-        $user = new User();
-        $user->setUsername('user')
-        ->setEmail('user@user.fr')
-        ->setRoles(['ROLE_USER'])
-        ->setPassword($this->passwordHasher->hashPassword($user, 'test'));
-        $this->addReference('user-2', $user);
-        $manager->persist($user);
-        $manager->flush();
-
-        //Anonymous
-        $user = new User();
-        $user->setUsername('anonymous')
-        ->setEmail('anonymous@anonymous.fr')
-        ->setRoles([])
-        ->setPassword($this->passwordHasher->hashPassword($user, 'anonymous'));
-        $this->addReference('user-3', $user);
-        $manager->persist($user);
-        $manager->flush();
-
-        ;
     }
 }

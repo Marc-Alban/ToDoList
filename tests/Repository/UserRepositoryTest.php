@@ -1,33 +1,34 @@
 <?php
 
-
 namespace App\Tests\Repository;
 
-
-use App\Entity\User;
+use App\DataFixtures\UserFixtures;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 
 class UserRepositoryTest extends KernelTestCase
 {
-   /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private EntityManager $entityManager;
 
-    protected function setUp(): void
+
+    /** @var AbstractDatabaseTool */
+    protected $databaseTool;
+
+    public function setUp(): void
     {
-        $kernel = self::bootKernel();
-
-        $this->entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
+        parent::setUp();
+        $this->databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
     }
 
-    public function testUserRepo(): void
+    public function testCount()
     {
-        $repo = $this->entityManager->getRepository(User::class);
-        $this->assertInstanceOf(UserRepository::class, $repo);
+        self::bootKernel();
+
+        $this->databaseTool->loadFixtures([UserFixtures::class]);
+
+        $users = self::getContainer()->get(UserRepository::class)->count([]);
+
+        $this->assertEquals(10, $users);
     }
 }

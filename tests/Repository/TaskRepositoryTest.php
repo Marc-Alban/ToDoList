@@ -2,30 +2,33 @@
 
 namespace App\Tests\Repository;
 
-use App\Entity\Task;
+use App\DataFixtures\TaskFixtures;
 use App\Repository\TaskRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 
 class TaskRepositoryTest extends KernelTestCase
 {
-   /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private EntityManager $entityManager;
+ 
 
-    protected function setUp(): void
+    /** @var AbstractDatabaseTool */
+    protected $databaseTool;
+
+    public function setUp(): void
     {
-        $kernel = self::bootKernel();
-
-        $this->entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
+        parent::setUp();
+        $this->databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
     }
 
-    public function testTaskrepo(): void
+    public function testCount()
     {
-        $repo = $this->entityManager->getRepository(Task::class);
-        $this->assertInstanceOf(TaskRepository::class, $repo);
+        self::bootKernel();
+
+        $this->databaseTool->loadFixtures([TaskFixtures::class]);
+
+        $users = self::getContainer()->get(TaskRepository::class)->count([]);
+
+        $this->assertEquals(11, $users);
     }
 }

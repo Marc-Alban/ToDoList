@@ -25,17 +25,13 @@ class TaskVoter extends Voter
             return false;
         }
 
-        if (null == $task->getUser()) {
-            return false;
-        }
-
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case 'TASK_EDIT':
                 if ($task->getUser()->getId() === $user->getId()) {
                     return true;
                 }
-                if ($user->getUsername() === 'admin' && $task->getUser()->getRoles() === []) {
+                if ($user->getUserIdentifier() === 'Admin' && $task->getUser()->getRoles() === ['']) {
                     return true;
                 }
                 break;
@@ -44,7 +40,7 @@ class TaskVoter extends Voter
                     return true;
                 }
 
-                if ($user->getUsername() === 'admin' && $task->getUser()->getRoles() === []) {
+                if ($user->getUserIdentifier() === 'Admin' && $task->getUser()->getRoles() === ['']) {
                     return true;
                 }
                 break;

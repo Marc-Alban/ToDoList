@@ -2,18 +2,29 @@
 
 namespace App\Tests\Controller;
 
-use App\Tests\logTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultControllerTest extends WebTestCase
 {
-    use logTrait;
 
-    public function testIndexAction(): void
+    private $client;
+
+    public function setUp(): void
     {
-        $this->loginUser();
-
-        $this->client->request('GET', '/');
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client = static::createClient();
     }
+
+    public function testIndexActionNotLog()
+    {
+        $this->client->request('GET', '/');
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+
+    public function testIndexActionNotLogRedirect()
+    {
+        $this->client->request('GET', '/');
+        $this->assertResponseRedirects('/login');
+    }
+
 }
