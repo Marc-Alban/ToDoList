@@ -4,8 +4,8 @@ namespace App\Tests\Entity;
 
 use App\Entity\Task;
 use App\Entity\User;
-use Doctrine\Common\Collections\Collection;
 use PHPUnit\Framework\TestCase;
+use Doctrine\Common\Collections\Collection;
 
 class UserTest extends TestCase
 {

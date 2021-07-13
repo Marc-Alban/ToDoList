@@ -17,4 +17,11 @@ trait LogTrait
         $form = $crawler->selectButton('login')->form();
         $this->client->submit($form, ['_username' => 'Admin', '_password' => 'root']);
     }
+
+    public function loginAnonymous(): void
+    {
+        $crawler = $this->client->request('GET', '/login');
+        $form = $crawler->selectButton('login')->form();
+        $this->client->submit($form, ['_username' => 'anonymous', '_password' => 'test']);
+    }
 }

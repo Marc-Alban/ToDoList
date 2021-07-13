@@ -27,14 +27,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\Column(type="string", length=25, unique=true, nullable=true)
      * @Assert\NotBlank(message="You must enter a username")
      */
     private ?string $username;
 
     /**
-     * @ORM\Column(type="string", length=64)
-     * @Assert\Length(max=4096)
+     * @ORM\Column(type="string", length=64, nullable=true)
+     * @Assert\Length(min=5,max=500)
      * @Assert\NotBlank(message="You must enter a password")
      * @Assert\Regex(
      *      pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}$/",
@@ -44,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password;
 
     /**
-     * @ORM\Column(type="string", length=60, unique=true)
+     * @ORM\Column(type="string", length=60, nullable=true, unique=true)
      * @Assert\NotBlank(message="You must enter an email address")
      * @Assert\Email(message="Address format is not correct")
      */
@@ -75,7 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->username;
     }
 
-    public function setUsername(string $username): self
+    public function setUsername(?string $username): self
     {
         $this->username = $username;
 
@@ -96,7 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
@@ -108,7 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 

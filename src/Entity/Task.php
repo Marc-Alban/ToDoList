@@ -59,14 +59,6 @@ class Task
         return $this->id;
     }
 
-    // Only used for test fixtures
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;

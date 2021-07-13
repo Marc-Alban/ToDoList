@@ -2,11 +2,12 @@
 
 namespace App\Tests\Controller;
 
+use App\Tests\LogTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
 
 class DefaultControllerTest extends WebTestCase
 {
+    use LogTrait;
 
     private $client;
 
@@ -15,15 +16,19 @@ class DefaultControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testIndexActionNotLog()
+    public function testIndexActionLogin()
     {
+        $this->loginUser();
         $this->client->request('GET', '/');
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+        static::assertSame(200, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testIndexActionNotLogRedirect()
+    public function testIndexActionWithoutLogin()
     {
         $this->client->request('GET', '/');
-        $this->assertResponseRedirects();
+        static::assertSame(302, $this->client->getResponse()->getStatusCode());
+        $crawler = $this->client->followRedirect();
+        static::assertSame(1, $crawler->filter('input[name="_username"]')->count());
+        static::assertSame(1, $crawler->filter('input[name="_password"]')->count());
     }
 }
