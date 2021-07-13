@@ -24,7 +24,7 @@ class DefaultControllerTest extends WebTestCase
     public function testIndexActionNotLogRedirect()
     {
         $this->client->request('GET', '/');
-        $this->assertResponseRedirects('/login');
+        $this->assertResponseRedirects();
     }
 
 }

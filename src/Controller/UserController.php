@@ -58,7 +58,6 @@ class UserController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN') || $user->getId() === $this->getUser()->getId()) {
             $form = $this->createForm(UserType::class, $user);
             $form->handleRequest($request);
-
             if ($form->isSubmitted() && $form->isValid()) {
                 $user->setRoles($user->getRoles());
                 $password = $encoder->hashPassword($user, $user->getPassword());
@@ -69,7 +68,7 @@ class UserController extends AbstractController
             }
             return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
         }
-
+        
         return $this->redirectToRoute('homepage');
     }
 

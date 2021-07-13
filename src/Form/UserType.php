@@ -19,9 +19,10 @@ class UserType extends AbstractType
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Both passwords must match. ',
-                'required' => true,
+                'required' => false,
                 'first_options'  => ['label' => 'Password'],
-                'second_options' => ['label' => 'Type password to new'],
+                'second_options' => ['label' => 'Type password to new',
+                'required' => false],
             ])
             ->add('email', EmailType::class, ['label' => 'Email'])
             ->add('roles', ChoiceType::class, [

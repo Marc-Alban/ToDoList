@@ -28,26 +28,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
-     * @Assert\NotBlank(message="You must enter a username.")
+     * @Assert\NotBlank(message="You must enter a username")
      */
-    private string $username;
+    private ?string $username;
 
     /**
      * @ORM\Column(type="string", length=64)
      * @Assert\Length(max=4096)
+     * @Assert\NotBlank(message="You must enter a password")
      * @Assert\Regex(
      *      pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}$/",
      *      message="The password must be at least 6 characters long, lowercase, uppercase and numeric."
      * )
      */
-    private string $password;
+    private ?string $password;
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
-     * @Assert\NotBlank(message="Vous devez saisir une adresse email.")
-     * @Assert\Email(message="Le format de l'adresse n'est pas correcte.")
+     * @Assert\NotBlank(message="You must enter an email address")
+     * @Assert\Email(message="Address format is not correct")
      */
-    private string $email;
+    private ?string $email;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="user", orphanRemoval=true)

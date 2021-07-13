@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Tests\Controller;
+namespace App\Tests\Unit\Controller;
 
+
+use App\Tests\LogTrait;
 use App\DataFixtures\UserFixtures;
 use App\Repository\UserRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
@@ -12,136 +13,63 @@ use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 
 class UserControllerTest extends WebTestCase
 {
+    use LogTrait;
+
     private $client;
-    private $user;
+    
+   /** @var AbstractDatabaseTool */
+   protected $databaseTool;
 
-    /** @var AbstractDatabaseTool */
-    protected $databaseTool;
+   public function setUp(): void
+   {
+       parent::setUp();
+       $this->client = static::createClient();
+       $this->databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+       $this->databaseTool->loadFixtures([UserFixtures::class]); 
+   }
 
-    public function setUp(): void
+    public function testListAction()
     {
-        parent::setUp();
-        $this->client = static::createClient();
-        $this->databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $this->user = $this->databaseTool->loadFixtures([UserFixtures::class]); 
+        $this->loginAdmin();
+        $this->client->request('GET', '/users');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
-
-    public function testEditActionWithGoodCredentialsUser()
+    public function testCreateAction()
     {
-        $crawler = $this->client->request('GET', '/user/' . $this->users->getId() . '/edit');
-        $form = $crawler->selectButton('Update')->form([
-            'user[_password][first]' => 'test',
-            'user[_password][second]' => 'test'
-        ]);
+        $crawler = $this->client->request('GET', '/users/create');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
+        $form = $crawler->selectButton('Add')->form();
+        $form['user[username]'] = 'autre';
+        $form['user[password][first]'] = 'Test123..';
+        $form['user[password][second]'] = 'Test123..';
+        $form['user[email]'] = 'autre@autre.org';
+        $form['user[roles][0]']->tick();
         $this->client->submit($form);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
-        $this->assertResponseRedirects();
+        if ($this->client->getResponse()->isRedirection()) {
+            $crawler = $this->client->followRedirect();
+        }
+        $this->assertSame(302, $this->client->getResponse()->getStatusCode());
+        $crawler->filter('strong:contains("Superb !")');
     }
 
-    
-    public function testlistActionNotLog()
+    public function testUpdateAction()
     {
-        $this->client->request('GET', '/users');
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+        $this->loginUser();
+        
+        $crawler = $this->client->request('GET', '/users/1/edit');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        $form = $crawler->selectButton('Update')->form();
+        $form['user[username]'] = 'User123';
+        $form['user[password][first]'] = 'Test123..';
+        $form['user[password][second]'] = 'Test123..';
+        $form['user[email]'] = 'user123@autre.org';
+        $form['user[roles][0]']->tick();
+        $this->client->submit($form);
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testlistActionNotLogRedirect()
-    {
-        $this->client->request('GET', '/users');
-        $this->assertResponseRedirects();
-    }
 }
- 
-    // public function testEditActionWithGoodCredentialsAdmin()
-    // {
-    //     $user = self::getContainer()->get(UserRepository::class)->findOneBy(['username' => 'Admin']);
-    //     $crawler = $this->client->request('GET', '/user/' . $user->getId() . '/edit');
-    //     $form = $crawler->selectButton('Modifier')->form([
-    //         'user[password][first]' => 'test',
-    //         'user[password][second]' => 'test'
-    //     ]);
-
-    //     $this->client->submit($form);
-    //     $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
-    //     $this->assertResponseRedirects();
-    // }
-
-    // public function testEditActionWithBadCredentials()
-    // {
-    //     $crawler = $this->client->request('GET', '/user/' . $this->users->getId() . '/edit');
-    //     $form = $crawler->selectButton('Modifier')->form([
-    //         'user[password][first]' => '',
-    //         'user[password][second]' => ''
-    //     ]);
-
-    //     $this->client->submit($form);
-
-    //     $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    //     $this->assertSelectorTextContains('ul.list-unstyled', 'Le mot de passe ne peu pas être vide.');
-    // }
-
-    // public function testcreateActionWithBadCredentials()
-    // {
-    //     $crawler = $this->client->request('GET', '/user/create');
-    //     $form = $crawler->selectButton('Ajouter')->form([
-    //         'user[username]' => 'test1',
-    //         'user[email]' => 'test',
-    //         'user[password][first]' => 'test',
-    //         'user[password][second]' => 'test'
-    //     ]);
-    //     $this->client->submit($form);
-    //     $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    //     $this->assertSelectorTextContains('ul.list-unstyled', 'Le format de l\'adresse n\'est pas correcte.');
-    // }
-
-    // public function testcreateActionWithGoodCredentialsUser()
-    // {
-    //     $crawler = $this->client->request('GET', '/user/create');
-    //     $form = $crawler->selectButton('Ajouter')->form([
-    //         'user[username]' => 'test1',
-    //         'user[email]' => 'test1@test.fr',
-    //         'user[password][first]' => 'test',
-    //         'user[password][second]' => 'test'
-    //     ]);
-
-    //     $this->client->submit($form);
-    //     $this->assertResponseRedirects();
-    //     $this->client->followRedirect();
-    //     $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    //     $this->assertSelectorTextContains('div.alert.alert-success', 'Superbe ! L\'utilisateur a bien été ajouté.');
-    // }
-
-    // public function testcreateActionWithGoodCredentialsAdmin()
-    // {
-    //     $crawler = $this->client->request('GET', '/user/create');
-    //     $form = $crawler->selectButton('Ajouter')->form([
-    //         'user[username]' => 'test1',
-    //         'user[email]' => 'test1@test.fr',
-    //         'user[password][first]' => 'test',
-    //         'user[password][second]' => 'test'
-    //     ]);
-
-    //     $this->client->submit($form);
-    //     $this->assertResponseRedirects('/users');
-    //     $this->client->followRedirect();
-    //     $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    //     $this->assertSelectorTextContains('div.alert.alert-success', 'Superbe ! L\'utilisateur a bien été ajouté.');
-    // }
-
-    // public function testcreateActionWithExistingCredentials()
-    // {
-    //     $crawler = $this->client->request('GET', '/user/create');
-    //     $form = $crawler->selectButton('Ajouter')->form([
-    //         'user[username]' => 'test',
-    //         'user[email]' => 'test@test.fr',
-    //         'user[password][first]' => 'test',
-    //         'user[password][second]' => 'test'
-    //     ]);
-    //     $this->client->submit($form);
-    //     $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    //     $this->assertSelectorTextContains('ul.list-unstyled', 'This value is already used.');
-    // }
-// }
