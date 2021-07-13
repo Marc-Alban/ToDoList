@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Entity;
 
 use App\Entity\Task;
@@ -17,7 +16,7 @@ class TaskTest extends TestCase
         $title = $task->getTitle();
         $this->assertInstanceOf(\DateTime::class, $task->getCreatedAt());
         $task->setCreatedAt(new \DateTime('2011-01-01T15:03:01.012345Z'));
-        $date=new \DateTime('2011-01-01T15:03:01.012345Z');
+        $date = new \DateTime('2011-01-01T15:03:01.012345Z');
         $this->assertEquals($date, $task->getCreatedAt());
         $this->assertSame('test', $title);
         $task->setContent('test');

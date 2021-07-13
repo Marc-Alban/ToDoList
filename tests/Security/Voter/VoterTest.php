@@ -17,17 +17,17 @@ class TaskVoterTest extends TestCase
     public function testTaskVoter($user, $expected, $action): void
     {
         // create the voter for testing
-    	$voter = new TaskVoter();
+        $voter = new TaskVoter();
         // create the task
-    	$task = new Task();
+        $task = new Task();
         $token = new AnonymousToken('secret', 'anonymous');
-        if($user){
+        if ($user) {
             // Generate a  user login
             $token = new UsernamePasswordToken($user, 'credentials', 'memory');
             // Defined $user for a task
             $task->setUser($user);
         }
-        // Compare 
+        // Compare
         $this->assertSame($expected, $voter->vote($token, $task, [$action]));
     }
 
@@ -43,5 +43,4 @@ class TaskVoterTest extends TestCase
             [null, -1, 'TASK_DELETE'],
         ];
     }
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Unit\Controller;
 
 use App\Tests\LogTrait;
@@ -14,17 +13,17 @@ class TaskControllerTest extends WebTestCase
     use LogTrait;
 
     private $client;
-    
-   /** @var AbstractDatabaseTool */
-   protected $databaseTool;
 
-   public function setUp(): void
-   {
-       parent::setUp();
-       $this->client = static::createClient();
-       $this->databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-       $this->databaseTool->loadFixtures([TaskFixtures::class]); 
-   }
+   /** @var AbstractDatabaseTool */
+    protected $databaseTool;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->client = static::createClient();
+        $this->databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $this->databaseTool->loadFixtures([TaskFixtures::class]);
+    }
 
     public function testListAction()
     {
@@ -70,7 +69,7 @@ class TaskControllerTest extends WebTestCase
         $form['task[title]'] = 'letitredematache';
         $form['task[content]'] = 'lecontenuedematache';
         $this->client->submit($form);
-        
+
         if ($this->client->getResponse()->isRedirection()) {
             $crawler = $this->client->followRedirect();
         }

@@ -2,7 +2,6 @@
 
 namespace App\Tests\Unit\Controller;
 
-
 use App\Tests\LogTrait;
 use App\DataFixtures\UserFixtures;
 use App\Repository\UserRepository;
@@ -10,23 +9,22 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 
-
 class UserControllerTest extends WebTestCase
 {
     use LogTrait;
 
     private $client;
-    
-   /** @var AbstractDatabaseTool */
-   protected $databaseTool;
 
-   public function setUp(): void
-   {
-       parent::setUp();
-       $this->client = static::createClient();
-       $this->databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-       $this->databaseTool->loadFixtures([UserFixtures::class]); 
-   }
+   /** @var AbstractDatabaseTool */
+    protected $databaseTool;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->client = static::createClient();
+        $this->databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $this->databaseTool->loadFixtures([UserFixtures::class]);
+    }
 
     public function testListAction()
     {
@@ -58,7 +56,7 @@ class UserControllerTest extends WebTestCase
     public function testUpdateAction()
     {
         $this->loginUser();
-        
+
         $crawler = $this->client->request('GET', '/users/1/edit');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
@@ -71,5 +69,4 @@ class UserControllerTest extends WebTestCase
         $this->client->submit($form);
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
     }
-
 }

@@ -23,37 +23,37 @@ class SecurityControllerTest extends WebTestCase
     public function testloginActionWithBadCredentials()
     {
         $crawler = $this->client->request('GET', '/login');
-        
+
         $form = $crawler->selectButton('login')->form([
             '_username' => 'notgoodusername',
             '_password' => 'notgoodpassword'
         ]);
 
-      $this->client->submit($form);
+        $this->client->submit($form);
 
-      $this->assertResponseRedirects();
+        $this->assertResponseRedirects();
 
-      $this->client->followRedirect();
+        $this->client->followRedirect();
 
         $this->assertSelectorExists('.alert.alert-danger');
     }
 
     public function testloginActionWithNoToken()
     {
-     
+
         $crawler = $this->client->request('GET', '/login');
-        
+
         $form = $crawler->selectButton('login')->form([
             '_username' => 'notgoodusername',
             '_password' => 'notgoodpassword',
             '_csrf_token' => ''
         ]);
 
-      $this->client->submit($form);
+        $this->client->submit($form);
 
         $this->assertResponseRedirects();
 
-      $this->client->followRedirect();
+        $this->client->followRedirect();
 
         $this->assertSelectorExists('.alert.alert-danger');
     }

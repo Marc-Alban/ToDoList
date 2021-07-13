@@ -10,7 +10,7 @@ use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 
 class TaskRepositoryTest extends KernelTestCase
 {
- 
+
 
     /** @var AbstractDatabaseTool */
     protected $databaseTool;

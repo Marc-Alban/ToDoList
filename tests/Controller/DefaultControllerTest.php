@@ -26,5 +26,4 @@ class DefaultControllerTest extends WebTestCase
         $this->client->request('GET', '/');
         $this->assertResponseRedirects();
     }
-
 }

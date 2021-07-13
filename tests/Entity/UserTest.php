@@ -22,7 +22,7 @@ class UserTest extends TestCase
 
         $task = $this->createMock(Task::class);
         $task->method('getId')->willReturn(1);
-        
+
         $user->eraseCredentials();
         $this->assertNull($user->getSalt());
         $this->assertInstanceOf(User::class, $user->addTask($task));
@@ -31,7 +31,5 @@ class UserTest extends TestCase
 
         $user->setRoles(['ROLE_ADMIN']);
         $this->assertSame(['ROLE_ADMIN'], $user->getRoles());
-
     }
-
 }
