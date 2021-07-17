@@ -11,10 +11,11 @@ class DefaultController extends AbstractController
 {
     /**
      * @Route("/", name="homepage")
+     * @param UserRepository $userRepository
+     * @return Response
      */
     public function indexAction(UserRepository $userRepository): Response
     {
-
         return $this->render('default/index.html.twig', ['user' => $userRepository->findBy(['id' => $this->getUser()->getId()])]);
     }
 }

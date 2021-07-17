@@ -8,6 +8,11 @@ use PHPUnit\Framework\TestCase;
 
 class TaskTest extends TestCase
 {
+    /**
+     * Test entity task
+     *
+     * @return void
+     */
     public function testGet(): void
     {
         $task = new Task();

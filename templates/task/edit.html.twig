@@ -12,9 +12,7 @@
             <div class="mr-auto w-100 p-2">
             {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
             {{ form_widget(form) }}
-            {% if is_granted('TASK_EDIT', task) %}
             <button type="submit" class="btn btn-success pull-right">Update</button>
-            {% endif %}
             {{ form_end(form) }}
             </div>
     </div>

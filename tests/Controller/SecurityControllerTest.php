@@ -14,13 +14,23 @@ class SecurityControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testloginAction()
+    /**
+     * test login
+     *
+     * @return void
+     */
+    public function testloginAction(): void
     {
         $this->client->request('GET', '/login');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-    public function testloginActionWithBadCredentials()
+    /**
+     * test with bad credentials
+     *
+     * @return void
+     */
+    public function testloginActionWithBadCredentials(): void
     {
         $crawler = $this->client->request('GET', '/login');
 
@@ -38,7 +48,12 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSelectorExists('.alert.alert-danger');
     }
 
-    public function testloginActionWithNoToken()
+    /**
+     * test with no token
+     *
+     * @return void
+     */
+    public function testloginActionWithNoToken(): void
     {
 
         $crawler = $this->client->request('GET', '/login');
@@ -58,7 +73,12 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSelectorExists('.alert.alert-danger');
     }
 
-    public function testloginActionWithGoodCredentials()
+    /**
+     * test loginwith good credantial
+     *
+     * @return void
+     */
+    public function testloginActionWithGoodCredentials(): void
     {
         $crawler = $this->client->request('GET', '/login');
         $form = $crawler->selectButton('login')->form([
@@ -69,7 +89,12 @@ class SecurityControllerTest extends WebTestCase
         $this->assertResponseRedirects();
     }
 
-    public function testlogoutCheck()
+    /**
+     * test logout
+     *
+     * @return void
+     */
+    public function testlogoutCheck(): void
     {
         $this->client->request('GET', '/logout');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);

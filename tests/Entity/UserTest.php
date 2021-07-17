@@ -9,6 +9,11 @@ use Doctrine\Common\Collections\Collection;
 
 class UserTest extends TestCase
 {
+    /**
+     * Test entity task
+     *
+     * @return void
+     */
     public function testGet(): void
     {
         $user = new User();

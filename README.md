@@ -23,6 +23,6 @@ Create the database if it does not already exist, type the command below in the 
 ````
 6. (Optional) Install the fixtures to have a demo of dummy data in development:
 ````
-    php app/console doctrine:fixtures:load --env=dev --group=dev
+    php app/console doctrine:fixtures:load
 ````
 7. Congratulations the project is installed correctly, you can now start using it as you wish!

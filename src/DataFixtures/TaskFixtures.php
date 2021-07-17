@@ -16,7 +16,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
         $faker = new Factory();
         $faker = $faker::create('fr_FR');
 
-        for ($i = 1; $i <= 11; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $task = new Task();
             $task->setUser($this->getReference('user-' . $i));
             $task->setContent($faker->paragraph(2));

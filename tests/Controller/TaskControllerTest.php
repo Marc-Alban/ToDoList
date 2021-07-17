@@ -2,7 +2,6 @@
 
 namespace App\Tests\Unit\Controller;
 
-use App\Tests\LogTrait;
 use App\DataFixtures\TaskFixtures;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
@@ -10,7 +9,6 @@ use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 
 class TaskControllerTest extends WebTestCase
 {
-    use LogTrait;
 
     private $client;
 
@@ -19,27 +17,68 @@ class TaskControllerTest extends WebTestCase
 
     public function setUp(): void
     {
-        parent::setUp();
         $this->client = static::createClient();
         $this->databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
         $this->databaseTool->loadFixtures([TaskFixtures::class]);
     }
 
-    public function testListAction()
+
+    /**
+     * method for connection User
+     *
+     * @return void
+     */
+    public function loginUser(): void
+    {
+        $crawler = $this->client->request('GET', '/login');
+        $form = $crawler->selectButton('login')->form(['_username' => 'User1','_password' => 'test']);
+        $this->client->submit($form);
+    }
+
+
+    /**
+     * method for connection Admin
+     *
+     * @return void
+     */
+    public function loginAdmin(): void
+    {
+        $crawler = $this->client->request('GET', '/login');
+        $form = $crawler->selectButton('login')->form(['_username' => 'Admin','_password' => 'root']);
+        $this->client->submit($form);
+    }
+
+
+    /**
+     * test with role user
+     *
+     * @return void
+     */
+    public function testListAction(): void
     {
         $this->loginUser();
         $this->client->request('GET', '/tasks');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testListDoneAction()
+    /**
+     * test with role user
+     *
+     * @return void
+     */
+    public function testListDoneAction(): void
     {
         $this->loginUser();
         $this->client->request('GET', '/tasks/done');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testCreateAction()
+    /**
+     * test with role user
+     *
+     * @return void
+     */
+    public function testCreateAction(): void
     {
         $this->loginUser();
         $crawler = $this->client->request('GET', '/tasks/create');
@@ -58,7 +97,12 @@ class TaskControllerTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('div.alert-success')->count());
     }
 
-    public function testEditAction()
+    /**
+     * test with role user
+     *
+     * @return void
+     */
+    public function testEditAction(): void
     {
         $this->loginUser();
 
@@ -78,6 +122,11 @@ class TaskControllerTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('div.alert-success')->count());
     }
 
+    /**
+     * test with role user
+     *
+     * @return void
+     */
     public function testToogleTaskAction(): void
     {
         $this->loginUser();
@@ -94,7 +143,12 @@ class TaskControllerTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('div.alert-success')->count());
     }
 
-    public function testDeleteAction()
+    /**
+     * test with role user
+     *
+     * @return void
+     */
+    public function testDeleteAction(): void
     {
         $this->loginUser();
 

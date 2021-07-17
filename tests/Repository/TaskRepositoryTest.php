@@ -15,13 +15,19 @@ class TaskRepositoryTest extends KernelTestCase
     /** @var AbstractDatabaseTool */
     protected $databaseTool;
 
+
     public function setUp(): void
     {
         parent::setUp();
         $this->databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
     }
 
-    public function testCount()
+    /**
+     * test count database entry
+     *
+     * @return void
+     */
+    public function testCount(): void
     {
         self::bootKernel();
 
@@ -29,6 +35,6 @@ class TaskRepositoryTest extends KernelTestCase
 
         $users = self::getContainer()->get(TaskRepository::class)->count([]);
 
-        $this->assertEquals(11, $users);
+        $this->assertEquals(10, $users);
     }
 }

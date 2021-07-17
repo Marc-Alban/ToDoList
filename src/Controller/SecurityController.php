@@ -11,6 +11,8 @@ class SecurityController extends AbstractController
 {
     /**
      * @Route("/login", name="login")
+     * @param AuthenticationUtils $authenticationUtils
+     * @return Response
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -27,6 +29,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login_check", name="login_check")
      * @codeCoverageIgnore
+     * @return void
      */
     public function loginCheck(): void
     {
@@ -36,6 +39,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/logout", name="logout")
      * @codeCoverageIgnore
+     * @return void
      */
     public function logoutCheck(): void
     {

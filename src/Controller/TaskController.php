@@ -16,6 +16,9 @@ class TaskController extends AbstractController
 {
     /**
      * @Route("/tasks", name="task_list")
+     *
+     * @param TaskRepository $taskRepository
+     * @return Response
      */
     public function listAction(TaskRepository $taskRepository): Response
     {
@@ -24,6 +27,9 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/done", name="task_list_done")
+     *
+     * @param TaskRepository $taskRepository
+     * @return Response
      */
     public function listDone(TaskRepository $taskRepository): Response
     {
@@ -33,6 +39,10 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/create", name="task_create")
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
      */
     public function createAction(Request $request, EntityManagerInterface $manager): Response
     {
@@ -56,12 +66,17 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/edit", name="task_edit")
+     *
+     * @param Task $task
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
      */
     public function editAction(Task $task, Request $request, EntityManagerInterface $manager): Response
     {
+
         $this->denyAccessUnlessGranted('TASK_EDIT', $task);
         $form = $this->createForm(TaskType::class, $task);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -80,10 +95,15 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
+     *
+     * @param Task $task
+     * @param EntityManagerInterface $manager
+     * @return RedirectResponse
      */
     public function toggleAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
         $this->denyAccessUnlessGranted('TASK_EDIT', $task);
+
         $task->setIsDone(!$task->getIsDone());
         $manager->flush();
 
@@ -93,16 +113,29 @@ class TaskController extends AbstractController
     }
 
     /**
+     * Method for compressing the delete function and avoiding repetition
+     *
+     * @param Task $task
+     * @param EntityManagerInterface $manager
+     * @return void
+     */
+    private function delete(Task $task, EntityManagerInterface $manager): void
+    {
+    }
+
+    /**
      * @Route("/tasks/{id}/delete", name="task_delete")
+     *
+     * @param Task $task
+     * @param EntityManagerInterface $manager
+     * @return RedirectResponse
      */
     public function deleteAction(Task $task, EntityManagerInterface $manager): RedirectResponse
     {
-            $this->denyAccessUnlessGranted('TASK_DELETE', $task);
-            $manager->remove($task);
-            $manager->flush();
-
+        $this->denyAccessUnlessGranted('TASK_DELETE', $task);
+        $manager->remove($task);
+        $manager->flush();
         $this->addFlash('success', 'The task has been removed.');
-
-        return $this->redirectToRoute('task_list');
+            return $this->redirectToRoute('task_list');
     }
 }
