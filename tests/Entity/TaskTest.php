@@ -4,25 +4,32 @@ namespace App\Tests\Entity;
 
 use App\Entity\Task;
 use App\Entity\User;
-use DateTime;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use PHPUnit\Framework\TestCase;
 
-class TaskTest extends WebTestCase
+class TaskTest extends TestCase
 {
-    public function testEntityTask()
+    /**
+     * Test entity task
+     *
+     * @return void
+     */
+    public function testGet(): void
     {
         $task = new Task();
-        $task->setTitle('A title');
-        $task->setContent('A great content!');
-        $task->setCreatedAt(new \Datetime('2021-10-20'));
-        $task->setIsDone(true);
-        $user = new User();
-        $task->setUser($user);
-
-        $this->assertEquals('A title', $task->getTitle());
-        $this->assertEquals('A great content!', $task->getContent());
-        $this->assertEquals(new DateTime('2021-10-20'), $task->getCreatedAt());
-        $this->assertTrue($task->getIsDone());
-        $this->assertEquals($user, $task->getUser());
+        $this->assertInstanceOf(Task::class, new Task());
+        $task->setTitle('test');
+        $title = $task->getTitle();
+        $this->assertInstanceOf(\DateTime::class, $task->getCreatedAt());
+        $task->setCreatedAt(new \DateTime('2011-01-01T15:03:01.012345Z'));
+        $date = new \DateTime('2011-01-01T15:03:01.012345Z');
+        $this->assertEquals($date, $task->getCreatedAt());
+        $this->assertSame('test', $title);
+        $task->setContent('test');
+        $content = $task->getContent();
+        $this->assertSame('test', $content);
+        $this->assertSame(false, $task->getIsDone());
+        $this->assertInstanceOf(Task::class, $task->setIsDone(false));
+        $this->assertInstanceOf(Task::class, $task->setUser(new User()));
+        $this->assertInstanceOf(User::class, $task->getUser());
     }
 }

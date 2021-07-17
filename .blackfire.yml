@@ -1,0 +1,24 @@
+# .blackfire.yml
+tests:
+    "Toutes les pages sont rapides":
+        path: "/.*"
+        assertions:
+            - main.wall_time < 300ms
+            - main.memory < 20Mb
+    "Tests spécifiques à Symfony":
+        path: "/.*"
+        assertions:
+            - metrics.symfony.kernel.debug.count == 0 # en mode production
+            - metrics.symfony.yaml.reads.count == 0 # mise en cache du YAML
+    "Tests spécifiques à Twig":
+        path: "/.*"
+        assertions:
+            - metrics.twig.compile.count == 0 # Pas de compilation en production
+            - metrics.twig.attributes.get.count < 30 # Pas trop de logique dans les templates
+            - metrics.twig.compile.count == 0
+            - metrics.symfony.config_check.count == 0
+            - metrics.doctrine.annotations.parsed.count 
+            - metrics.doctrine.annotations.read.count 
+            - metrics.doctrine.entities.metadata.count 
+            - metrics.doctrine.proxies.generated.count == 0
+            - metrics.symfony.yaml.reads.count == 0

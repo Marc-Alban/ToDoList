@@ -16,18 +16,25 @@ class UserController extends AbstractController
 {
     /**
      * @Route("/users", name="user_list")
+     *
+     * @param UserRepository $userRepository
+     * @return Response
      */
     public function listAction(UserRepository $userRepository): Response
     {
-        if ($this->isGranted("ROLE_ADMIN")) {
-            return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
-        }
-        return $this->redirectToRoute('homepage');
+        $user = $userRepository->findById($this->getUser()->getId());
+        $this->denyAccessUnlessGranted('USER_READ', $user[0]);
+        return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
     }
 
 
     /**
      * @Route("/users/create", name="user_create")
+     *
+     * @param Request $request
+     * @param UserPasswordHasherInterface $encoder
+     * @param EntityManagerInterface $manager
+     * @return Response
      */
     public function createAction(Request $request, UserPasswordHasherInterface $encoder, EntityManagerInterface $manager): Response
     {
@@ -50,15 +57,20 @@ class UserController extends AbstractController
 
     /**
      * @Route("/users/{id}/edit", name="user_edit")
+     *
+     * @param User $user
+     * @param Request $request
+     * @param UserPasswordHasherInterface $encoder
+     * @param EntityManagerInterface $manager
+     * @return Response
      */
     public function editAction(User $user, Request $request, UserPasswordHasherInterface $encoder, EntityManagerInterface $manager): Response
     {
-        $this->denyAccessUnlessGranted('User_EDIT', $user);
+        $this->denyAccessUnlessGranted('USER_EDIT', $user);
 
         if ($this->isGranted('ROLE_ADMIN') || $user->getId() === $this->getUser()->getId()) {
             $form = $this->createForm(UserType::class, $user);
             $form->handleRequest($request);
-
             if ($form->isSubmitted() && $form->isValid()) {
                 $user->setRoles($user->getRoles());
                 $password = $encoder->hashPassword($user, $user->getPassword());
@@ -67,23 +79,23 @@ class UserController extends AbstractController
                 $manager->flush();
                 $this->addFlash('success', "The user has been modified");
             }
-            return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
         }
-
-        return $this->redirectToRoute('homepage');
+        return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
     }
 
     /**
      * @Route("/users/{id}/delete", name="user_delete")
+     *
+     * @param User $user
+     * @param EntityManagerInterface $manager
+     * @return Response
      */
     public function deleteAction(User $user, EntityManagerInterface $manager): Response
     {
-            $this->denyAccessUnlessGranted('User_DELETE', $user);
-            $manager->remove($user);
-            $manager->flush();
-
+        $this->denyAccessUnlessGranted('USER_DELETE', $user);
+        $manager->remove($user);
+        $manager->flush();
         $this->addFlash('success', 'The user has been removed.');
-
         return $this->redirectToRoute('user_list');
     }
 }

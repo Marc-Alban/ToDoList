@@ -13,8 +13,8 @@ class TaskVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['Task_DELETE','Task_EDIT'])
-            && $subject instanceof \App\Entity\Task;
+        return in_array($attribute, ['TASK_DELETE','TASK_EDIT'])
+            && $subject instanceof Task;
     }
 
     protected function voteOnAttribute(string $attribute, $task, TokenInterface $token): bool
@@ -25,31 +25,19 @@ class TaskVoter extends Voter
             return false;
         }
 
-        if (null == $task->getUser()) {
-            return false;
-        }
-
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-            case 'Task_EDIT':
-                if ($task->getUser()->getId() === $user->getId()) {
-                    return true;
-                }
-                if ($user->getUsername() === 'admin' && $task->getUser()->getRoles() === [] ) {
+            case 'TASK_EDIT':
+                if ($task->getUser() === $user || $user->getRoles() === ['ROLE_ADMIN']) {
                     return true;
                 }
                 break;
-            case 'Task_DELETE':
-                if ($task->getUser()->getId() === $user->getId()) {
-                    return true;
-                }
-
-                if ($user->getUsername() === 'admin' && $task->getUser()->getRoles() === [] ) {
+            case 'TASK_DELETE':
+                if ($task->getUser() === $user || $user->getRoles() === ['ROLE_ADMIN']) {
                     return true;
                 }
                 break;
         }
-
         return false;
     }
 }

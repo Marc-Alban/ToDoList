@@ -25,7 +25,7 @@
         <nav class="navbar navbar-light navbar-fixed-top" style="background-color: #e3f2fd;" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">To Do List app</a>
+                    <a class="navbar-brand" href="{{ path('homepage') }}">To Do List app</a>
 
                     <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" />
                 </div>
@@ -37,10 +37,10 @@
             <div class="row">
                 {% if app.user %}
                 <a href="{{ path('logout') }}" class="pull-right btn btn-danger">log out</a>
-                <a href="{{ path('user_edit', {'id' : app.user.id}) }}" class="pull-right btn btn-warning">{{app.user.username}} (compte)</a>
-                    {% if is_granted('ROLE_ADMIN') == true %}
+                <a href="{{ path('user_edit', {'id' : app.user.id}) }}" class="pull-right btn btn-primary">{{app.user.username}} (compte)</a>
+                     {% if is_granted('USER_READ',app.user) %}
                         <a href="{{ path('user_list') }}" class="pull-right btn btn-warning">list user</a>
-                    {% endif %}
+                     {% endif %}
                 {% endif %}
 
                 {% if not app.user %}

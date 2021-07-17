@@ -4,32 +4,37 @@ namespace App\Tests\Entity;
 
 use App\Entity\Task;
 use App\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use PHPUnit\Framework\TestCase;
+use Doctrine\Common\Collections\Collection;
 
-class UserTest extends WebTestCase
+class UserTest extends TestCase
 {
-    use FixturesTrait;
-
-    public function testEntityUser()
+    /**
+     * Test entity task
+     *
+     * @return void
+     */
+    public function testGet(): void
     {
+        $user = new User();
 
-        // $user = new User();
-        // $user->setUserName('Jean-Paul');
-        // $user->setPassword('password');
-        // $this->assertNull($user->getSalt());
-        // $this->assertNull($user->eraseCredentials());
-        // $user->setEmail('name@name.fr');
-        // $user->setRoles(['ROLE_USER']);
+        $user->setUsername('test');
+        $this->assertSame('test', $user->getUsername());
+        $user->setEmail('test@gmail.com');
+        $this->assertSame('test@gmail.com', $user->getEmail());
+        $user->setPassword('test');
+        $this->assertSame('test', $user->getPassword());
 
-        // // $tasks = new Task();
-        // // $tasks->setTitle('A title');
-        // // $tasks->setContent('A great content!');
-        // // $tasks->setCreatedAt(new \Datetime('2021-10-20'));
-        // // $tasks->setIsDone(true);
+        $task = $this->createMock(Task::class);
+        $task->method('getId')->willReturn(1);
 
-        // $user->addTask($tasks);
-        //  $this->assertCount(1, $user->getTasks());
-        // // $user->removeTask($task);
-        //  $this->assertCount(0, $user->getTasks());
+        $user->eraseCredentials();
+        $this->assertNull($user->getSalt());
+        $this->assertInstanceOf(User::class, $user->addTask($task));
+        $this->assertInstanceOf(Collection::class, $user->getTasks());
+        $this->assertInstanceOf(User::class, $user->removeTask($task));
+
+        $user->setRoles(['ROLE_ADMIN']);
+        $this->assertSame(['ROLE_ADMIN'], $user->getRoles());
     }
 }

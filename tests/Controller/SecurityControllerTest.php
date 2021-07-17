@@ -2,25 +2,101 @@
 
 namespace App\Tests\Controller;
 
-use App\Tests\logTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class SecurityControllerTest extends WebTestCase
 {
-    use logTrait;
+    private $client;
 
-    public function testLogin()
+    public function setUp(): void
     {
-        $this->loginUser();
-        $this->client->request('GET', '/');
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client = static::createClient();
     }
 
-    public function testLogOut()
+    /**
+     * test login
+     *
+     * @return void
+     */
+    public function testloginAction(): void
     {
-        $this->loginUser();
-        $crawler = $this->client->request('GET', '/');
-        $crawler->selectLink('log out')->link();
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/login');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    /**
+     * test with bad credentials
+     *
+     * @return void
+     */
+    public function testloginActionWithBadCredentials(): void
+    {
+        $crawler = $this->client->request('GET', '/login');
+
+        $form = $crawler->selectButton('login')->form([
+            '_username' => 'notgoodusername',
+            '_password' => 'notgoodpassword'
+        ]);
+
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects();
+
+        $this->client->followRedirect();
+
+        $this->assertSelectorExists('.alert.alert-danger');
+    }
+
+    /**
+     * test with no token
+     *
+     * @return void
+     */
+    public function testloginActionWithNoToken(): void
+    {
+
+        $crawler = $this->client->request('GET', '/login');
+
+        $form = $crawler->selectButton('login')->form([
+            '_username' => 'notgoodusername',
+            '_password' => 'notgoodpassword',
+            '_csrf_token' => ''
+        ]);
+
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects();
+
+        $this->client->followRedirect();
+
+        $this->assertSelectorExists('.alert.alert-danger');
+    }
+
+    /**
+     * test loginwith good credantial
+     *
+     * @return void
+     */
+    public function testloginActionWithGoodCredentials(): void
+    {
+        $crawler = $this->client->request('GET', '/login');
+        $form = $crawler->selectButton('login')->form([
+            '_username' => 'User',
+            '_password' => 'test'
+        ]);
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+    }
+
+    /**
+     * test logout
+     *
+     * @return void
+     */
+    public function testlogoutCheck(): void
+    {
+        $this->client->request('GET', '/logout');
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 }
