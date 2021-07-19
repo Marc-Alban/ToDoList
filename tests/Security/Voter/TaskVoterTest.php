@@ -27,6 +27,7 @@ class TaskVoterTest extends TestCase
             // Defined $user for a task
             $task->setUser($user);
         }
+
         // Compare
         $this->assertSame($expected, $voter->vote($token, $task, [$action]));
     }
