@@ -6,11 +6,12 @@ use App\DataFixtures\TaskFixtures;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 class TaskControllerTest extends WebTestCase
 {
 
-    private $client;
+    private KernelBrowser $client;
 
    /** @var AbstractDatabaseTool */
     protected $databaseTool;

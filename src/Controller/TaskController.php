@@ -112,16 +112,6 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('task_list');
     }
 
-    /**
-     * Method for compressing the delete function and avoiding repetition
-     *
-     * @param Task $task
-     * @param EntityManagerInterface $manager
-     * @return void
-     */
-    private function delete(Task $task, EntityManagerInterface $manager): void
-    {
-    }
 
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")

@@ -26,7 +26,7 @@ class UserVoterTest extends WebTestCase
             // Generate a  user login
             $token = new UsernamePasswordToken($user, 'credentials', 'memory');
             // Defined $user for a task
-            $task->setUser($user);
+            $user->addTask($task);
         }
         // Compare
         $this->assertSame($expected, $voter->vote($token, $user, [$action]));
