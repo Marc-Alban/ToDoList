@@ -1,8 +1,5 @@
 # P8-ToDoAndCo
 
-## Codacy Badge
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/97aa3656385b4113be9976f0fc868f5e)](https://www.codacy.com/gh/Marc-Alban/ToDoList/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Marc-Alban/ToDoList&amp;utm_campaign=Badge_Grade)****
-
 Improvement and documentation of an existing project ToDo & Co.
 
 ## Installation
