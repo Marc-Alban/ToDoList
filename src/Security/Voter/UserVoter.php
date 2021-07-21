@@ -37,28 +37,37 @@ class UserVoter extends Voter
 
         $user = $token->getUser();
 
+
+        // @codeCoverageIgnoreStart
         if (!$user instanceof UserInterface) {
             return false;
         }
+        // @codeCoverageIgnoreEnd
 
         switch ($attribute) {
             case 'USER_READ':
                 if ($user->getRoles() === ['ROLE_ADMIN']) {
                     return true;
                 }
+                // @codeCoverageIgnoreStart
                 break;
+                // @codeCoverageIgnoreEnd
             case 'USER_EDIT':
                 if ($user === $subject || $user->getRoles() === ['ROLE_ADMIN']) {
                     return true;
                 }
+                // @codeCoverageIgnoreStart
                 break;
+                // @codeCoverageIgnoreEnd
             case 'USER_DELETE':
                 if ($user === $subject) {
                     return false;
                 } elseif ($user->getRoles() === ['ROLE_ADMIN']) {
                     return true;
                 }
+                // @codeCoverageIgnoreStart
                 break;
+                // @codeCoverageIgnoreEnd
         }
         return false;
     }

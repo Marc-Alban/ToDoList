@@ -153,7 +153,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->tasks->removeElement($task);
             // set the owning side to null (unless already changed)
             if ($task->getUser() === $this) {
+                // @codeCoverageIgnoreStart
                 $task->setUser(null);
+                // @codeCoverageIgnoreEnd
             }
         }
 
