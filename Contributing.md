@@ -86,8 +86,6 @@ Patches should always be based on the oldest maintained branch that contains the
 
 **Make yourchanges.**
 
-Before you make your changes, read the [following best practices:](https://github.com/caroleguardiola/P8-OC-ToDoList/blob/master/documentation/Contributing%20to%20the%20project.md#making-your-code-follow-the-coding-standards-and-quality-process)  
-
 ***(Ensure that your code follows coding standards and the quality process)***
 
 **Commit your changes:**
